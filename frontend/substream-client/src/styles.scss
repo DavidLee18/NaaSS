@@ -1,0 +1,37 @@
+/* You can add global styles to this file, and also import other style files */
+
+@use '~@angular/material' as mat;
+
+@include mat.core();
+
+$nginx-primary: mat.define-palette(mat.$light-green-palette);
+$nginx-accent: mat.define-palette(mat.$purple-palette);
+
+$nginx-theme: mat.define-light-theme((
+ color: (
+   primary: $nginx-primary,
+   accent: $nginx-accent,
+ )
+));
+
+// Emit theme-dependent styles for common features used across multiple components.
+@include mat.core-theme($nginx-theme);
+
+// Emit styles for MatButton based on `$my-theme`. Because the configuration
+// passed to `define-light-theme` omits typography, `button-theme` will not
+// emit any typography styles.
+@include mat.button-theme($nginx-theme);
+
+// Include the theme mixins for other components you use here.
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.spacer { flex: 1 1 auto; }
+mat-form-field, button { margin: 8px; }
+table { text-align: center; }
+mat-toolbar {
+    position: sticky;
+    position: -webkit-sticky; /* For macOS/iOS Safari */
+    top: 0; /* Sets the sticky toolbar to be on top */
+    z-index: 1000; /* Ensure that your app's content doesn't overlap the toolbar */
+}
