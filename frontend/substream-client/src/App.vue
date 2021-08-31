@@ -1,23 +1,11 @@
 <template>
   <v-app>
-    <v-app-bar app color="primary" dark>
-      <v-app-bar-nav-icon></v-app-bar-nav-icon>
-
-      <v-toolbar-title>NaaSS</v-toolbar-title>
-
-      <v-spacer></v-spacer>
-
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
-    </v-app-bar>
-
-    <v-navigation-drawer permanent expand-on-hover>
+    <v-navigation-drawer
+      v-if="loggedIn"
+      permanent
+      :mini-variant.sync="mini"
+      app
+    >
       <v-list>
         <v-list-item class="px-2">
           <v-list-item-avatar>
@@ -58,21 +46,46 @@
           </v-list-item-icon>
           <v-list-item-title>Starred</v-list-item-title>
         </v-list-item>
+        <v-btn icon @click.stop="mini = !mini" class="mini-switcher">
+          <v-icon>{{ mini ? "mdi-chevron-right" : "mdi-chevron-left" }}</v-icon>
+        </v-btn>
       </v-list>
     </v-navigation-drawer>
 
+    <v-app-bar v-if="loggedIn" app color="primary" dark>
+      <v-app-bar-nav-icon></v-app-bar-nav-icon>
+
+      <v-toolbar-title>NaaSS</v-toolbar-title>
+
+      <v-spacer></v-spacer>
+
+      <v-btn icon @click="logout">
+        <v-icon> mdi-account-circle </v-icon>
+      </v-btn>
+    </v-app-bar>
+
     <v-main>
-      <router-view />
+      <v-container fluid>
+        <router-view />
+      </v-container>
     </v-main>
   </v-app>
 </template>
 
 <script>
 export default {
-  name: "App",
-
   data: () => ({
-    //
+    loggedInDummy: true,
+    mini: true,
   }),
+  computed: {
+    loggedIn() { return this.$store.getters.loggedIn; },
+    loggedInReal() { return true && this.loggedIn; }
+  },
+  methods: {
+    logout() { this.$store.dispatch('logout'); this.loggedInDummy = false; }
+  }
 };
 </script>
+
+<style scoped></style>
