@@ -1,0 +1,67 @@
+/* eslint-disable object-curly-spacing */
+/* eslint-disable max-len */
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+import Dashboard from './components/Dashboard.vue';
+import Login from './components/Login.vue';
+import store from './store';
+import nimTrip from './components/NIM_Trip.vue';
+import signup from './components/SignUp.vue';
+import notFound from './components/NotFound.vue';
+
+Vue.use(VueRouter);
+
+const router = new VueRouter({
+  mode: 'history',
+  routes: [
+    {
+      path: '/',
+      redirect: '/login',
+      beforeEnter: noAuthGuard,
+    },
+    {
+      path: '/dashboard',
+      name: 'Dashboard',
+      component: Dashboard,
+      beforeEnter: authGuard,
+    },
+    {
+      path: '/login',
+      name: 'Login',
+      component: Login,
+      beforeEnter: noAuthGuard,
+    },
+    {
+      path: '/nim-trip',
+      name: 'NIM Trip',
+      component: nimTrip,
+      beforeEnter: authGuard,
+    },
+    {
+      path: '/sign-up',
+      name: 'SignUp',
+      component: signup,
+      beforeEnter: noAuthGuard,
+    },
+    {
+      path: '**',
+      component: notFound,
+    },
+  ],
+});
+
+const authGuard = (to, from, next) => {
+  const loggedIn = store.getters.loggedIn;
+
+  if (!loggedIn && to.path !== '/login') next('/login');
+  else next();
+};
+
+const noAuthGuard = (to, from, next) => {
+  const loggedIn = store.getters.loggedIn;
+
+  if (loggedIn && to.path === '/login') next('/dashboard');
+  else next();
+};
+
+export default router;
