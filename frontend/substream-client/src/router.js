@@ -1,11 +1,9 @@
-/* eslint-disable object-curly-spacing */
-/* eslint-disable max-len */
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Dashboard from './components/Dashboard.vue';
 import Login from './components/Login.vue';
 import store from './store';
-import nimTrip from './components/NIM_Trip.vue';
+import nginxTrip from './components/NGINX_Trip.vue';
 import signup from './components/SignUp.vue';
 import notFound from './components/NotFound.vue';
 
@@ -34,7 +32,7 @@ const router = new VueRouter({
     {
       path: '/nim-trip',
       name: 'NIM Trip',
-      component: nimTrip,
+      component: nginxTrip,
       beforeEnter: authGuard,
     },
     {

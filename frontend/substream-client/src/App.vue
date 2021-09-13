@@ -15,7 +15,7 @@
           </v-list-item-avatar>
         </v-list-item>
 
-        <v-list-item link>
+        <v-list-item v-if="!mini">
           <v-list-item-content>
             <v-list-item-title class="text-h6">
               안녕하세요
@@ -48,9 +48,9 @@
         </v-list-item>
         <v-list-item link to="nim-trip">
           <v-list-item-icon>
-            <v-icon>settings_applications</v-icon>
+            <v-icon>accessibility_new</v-icon>
           </v-list-item-icon>
-          <v-list-item-title>NIM 체험관</v-list-item-title>
+          <v-list-item-title>NGINX 체험관</v-list-item-title>
         </v-list-item>
         <v-btn icon @click.stop="mini = !mini" class="mini-switcher">
           <v-icon>
@@ -60,7 +60,11 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-app-bar v-if="loggedIn" app color="primary" dark>
+    <v-app-bar v-if="loggedIn" :dense="presenting" app color="primary" dark>
+
+      <v-btn v-if="onTheTrip" @click="$router.back()" icon>
+        <v-icon>arrow_back</v-icon>
+      </v-btn>
 
       <v-toolbar-title>NaaSS</v-toolbar-title>
 
@@ -103,8 +107,6 @@
 </template>
 
 <script>
-/* eslint-disable object-curly-spacing */
-/* eslint-disable max-len */
 
 export default {
   data: () => ({
@@ -114,6 +116,18 @@ export default {
     loggedIn() {
       return this.$store.getters.loggedIn;
     },
+    onTheTrip() {
+      return this.$route.path === '/nim-trip' && this.$route.query.type > 0;
+    },
+    presenting() {
+      if (this.$route.path === '/nim-trip') {
+        // eslint-disable-next-line vue/no-async-in-computed-properties
+        setTimeout(() => { this.mini = true; }, 1000);
+        return true;
+      } else {
+        return false;
+      }
+    }
   },
   methods: {
     logout() {
