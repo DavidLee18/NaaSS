@@ -7,7 +7,8 @@ import './plugins/firebase';
 
 Vue.config.productionTip = false;
 
-new Vue({
+// eslint-disable-next-line no-unused-vars
+var vm = new Vue({
   router,
   vuetify,
   store,

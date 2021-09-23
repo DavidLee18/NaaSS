@@ -34,19 +34,7 @@
           </v-list-item-icon>
           <v-list-item-title>대시보드</v-list-item-title>
         </v-list-item>
-        <v-list-item link>
-          <v-list-item-icon>
-            <v-icon>mdi-account-multiple</v-icon>
-          </v-list-item-icon>
-          <v-list-item-title>Shared with me</v-list-item-title>
-        </v-list-item>
-        <v-list-item link>
-          <v-list-item-icon>
-            <v-icon>mdi-star</v-icon>
-          </v-list-item-icon>
-          <v-list-item-title>Starred</v-list-item-title>
-        </v-list-item>
-        <v-list-item link to="nim-trip">
+        <v-list-item link to="nginx-trip">
           <v-list-item-icon>
             <v-icon>accessibility_new</v-icon>
           </v-list-item-icon>
@@ -62,13 +50,15 @@
 
     <v-app-bar v-if="loggedIn" :dense="presenting" app color="primary" dark>
 
-      <v-btn v-if="onTheTrip" @click="$router.back()" icon>
+      <v-btn v-if="onTheTrip" @click="$router.push('/nginx-trip')" icon>
         <v-icon>arrow_back</v-icon>
       </v-btn>
 
       <v-toolbar-title>NaaSS</v-toolbar-title>
 
       <v-spacer></v-spacer>
+
+      <v-progress-circular v-if="loadIFrame" indeterminate></v-progress-circular>
 
       <v-tooltip bottom>
         <template v-slot:activator="{ on, attrs }">
@@ -93,7 +83,7 @@
     </v-app-bar>
 
     <v-main>
-      <v-container fluid>
+      <v-container fluid pa-0>
         <v-alert 
           v-if="$store.getters.errorMessage" 
           outlined 
@@ -110,6 +100,7 @@
 
 export default {
   data: () => ({
+    loadIFrame: false,
     mini: true,
   }),
   computed: {
@@ -117,10 +108,10 @@ export default {
       return this.$store.getters.loggedIn;
     },
     onTheTrip() {
-      return this.$route.path === '/nim-trip' && this.$route.query.type > 0;
+      return this.$route.path === '/nginx-trip' && this.$route.query.type > 0;
     },
     presenting() {
-      if (this.$route.path === '/nim-trip') {
+      if (this.$route.path === '/nginx-trip') {
         // eslint-disable-next-line vue/no-async-in-computed-properties
         setTimeout(() => { this.mini = true; }, 1000);
         return true;
@@ -137,6 +128,15 @@ export default {
       this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
     },
   },
+  watch: {
+    onTheTrip() {
+      if(this.onTheTrip) {
+        this.loadIFrame = true;
+        setTimeout(() => { this.loadIFrame = false; }, 3000);
+      }
+      else this.loadIFrame = false;
+    }
+  }
 };
 </script>
 

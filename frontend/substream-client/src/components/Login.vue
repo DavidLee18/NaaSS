@@ -1,5 +1,10 @@
 <template>
   <v-card elevation="5" class="mx-auto" max-width="400">
+    <v-layout justify-center align-center>
+      <v-flex shrink>
+        <p class="text-h5 text--primary">NaaSS 에 오신 것을 환영합니다</p>
+      </v-flex>
+    </v-layout>
     <v-card-title>E-mail 로 로그인하세요</v-card-title>
     <v-form v-model="valid" ref="form">
       <v-card-text>
@@ -70,4 +75,6 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.text--primary { margin: 2% 0%; }
+</style>

@@ -30,8 +30,8 @@ const router = new VueRouter({
       beforeEnter: noAuthGuard,
     },
     {
-      path: '/nim-trip',
-      name: 'NIM Trip',
+      path: '/nginx-trip',
+      name: 'NGINX Trip',
       component: nginxTrip,
       beforeEnter: authGuard,
     },
