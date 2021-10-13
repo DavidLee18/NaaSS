@@ -1,6 +1,7 @@
 from django.contrib.auth import authenticate, login, logout
 from django.http.response import HttpResponse, JsonResponse
 from django.utils.datastructures import MultiValueDictKeyError
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.parsers import JSONParser
@@ -57,6 +58,7 @@ def log_in(request):
         print(request.POST)
         return JsonResponse({'message': 'no username or password found'}, status=status.HTTP_400_BAD_REQUEST)
 
+#@csrf_exempt
 @api_view(['POST'])
 def log_out(request):
     try:
