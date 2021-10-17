@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
 from django.http.response import HttpResponse, JsonResponse
 from django.utils.datastructures import MultiValueDictKeyError
 from django.views.decorators.csrf import csrf_exempt
@@ -6,7 +7,10 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.parsers import JSONParser
 from .models import Profile
-from .serializers import ProfileSerializer
+from .serializers import ProfileSerializer, UserSerializer
+import logging
+
+logger = logging.getLogger(__name__)
 
 #profile api
 
@@ -48,6 +52,8 @@ def log_in(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
+            logger.debug(f'{UserSerializer(user).data} \n')
+            logger.debug('HEY!!! I AM HERE!!!!!')
             p = Profile.objects.get(user=user)
             return JsonResponse(ProfileSerializer(p).data)
         else:
@@ -55,7 +61,6 @@ def log_in(request):
                 'message': 'username or password invalid or doesn\'t match any user'
             }, status=status.HTTP_400_BAD_REQUEST)
     except MultiValueDictKeyError:
-        print(request.POST)
         return JsonResponse({'message': 'no username or password found'}, status=status.HTTP_400_BAD_REQUEST)
 
 #@csrf_exempt
@@ -66,3 +71,19 @@ def log_out(request):
         return HttpResponse(status=status.HTTP_200_OK)
     except:
         return JsonResponse({'message': 'error during logout'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['POST'])
+def create_user(request):
+    try:
+        username = request.POST['username']
+        email = request.POST['email']
+        password = request.POST['password']
+        user = User.objects.create_user(username, email, password)
+        if user is not None:
+            login(request, user)
+            p = Profile.objects.get(user=user)
+            return JsonResponse(ProfileSerializer(p).data)
+    except:
+        return JsonResponse({
+                'message': 'unknown error occured. maybe make sure your email is valid?'
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

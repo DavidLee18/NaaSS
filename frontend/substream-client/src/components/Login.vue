@@ -5,14 +5,13 @@
         <p class="text-h5 text--primary">NaaSS 에 오신 것을 환영합니다</p>
       </v-flex>
     </v-layout>
-    <v-card-title>E-mail 로 로그인하세요</v-card-title>
+    <v-card-title>사용자 이름으로 로그인하세요</v-card-title>
     <v-form v-model="valid" ref="form">
       <v-card-text>
         <v-text-field
-          v-model="email"
-          :rules="rules.email"
-          label="E-mail *"
-          type="email"
+          v-model="username"
+          label="사용자 이름(nickname) *"
+          :rules="rules.username"
           required
           outlined
         ></v-text-field>
@@ -46,14 +45,11 @@ export default {
     valid: false,
     passwordVisible: false,
     password: '',
-    email: '',
+    username: '',
     trying: false,
     rules: {
-      email: [
-        (v) => !!v || 'E-mail을 입력해 주세요',
-        (v) => /.+@.+/.test(v) || '유효한 E-mail이 아닙니다',
-      ],
-      password: [(v) => !!v || '비밀번호를 입력해 주세요'],
+      username: [ v => !!v || '사용자 이름이나 닉네임을 입력해 주세요' ],
+      password: [ v => !!v || '비밀번호를 입력해 주세요' ],
     },
   }),
   methods: {
@@ -63,11 +59,11 @@ export default {
       else {
         this.trying = true;
         this.$store.dispatch('login', {
-          email: this.email,
+          username: this.username,
           password: this.password,
         });
         this.trying = false;
-        this.$router.push({name: 'Dashboard'});
+        //this.$router.push({name: 'Dashboard'});
       }
     },
   },
