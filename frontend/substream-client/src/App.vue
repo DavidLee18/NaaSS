@@ -90,6 +90,7 @@
           type="error">
             오류가 발생했습니다: {{$store.getters.errorMessage}}
         </v-alert>
+        <div v-if="$store.getters.errorHtml" :v-html="$store.getters.errorHtml"></div>
         <router-view />
       </v-container>
     </v-main>
