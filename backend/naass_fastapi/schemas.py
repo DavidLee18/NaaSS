@@ -8,15 +8,14 @@ class ProfileBase(BaseModel):
 
 
 class ProfileCreate(ProfileBase):
-    pass
+    name: Optional[str] = None
+    department: Optional[str] = None
+    tel: Optional[str] = None
 
 
 class Profile(ProfileBase):
     id: int
     owner_id: int
-    name: Optional[str] = None
-    department: Optional[str] = None
-    tel: Optional[str] = None
 
     class Config:
         orm_mode = True

@@ -9,7 +9,7 @@ class User(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     email = Column(String(20), unique=True, index=True)
-    hashed_password = Column(String(100))
+    password = Column(String(100))
     reg_date = Column(Date, nullable=True)
 
     profiles = relationship("Profile", back_populates="owner")
