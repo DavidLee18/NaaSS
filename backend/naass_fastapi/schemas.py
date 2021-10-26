@@ -1,6 +1,7 @@
-from typing import List, Optional
-from pydantic import BaseModel
 from datetime import date
+from typing import List, Optional
+
+from pydantic import BaseModel
 
 
 class ProfileBase(BaseModel):
@@ -26,7 +27,7 @@ class UserBase(BaseModel):
 
 
 class UserCreate(UserBase):
-    password: str
+    hashed_password: str
 
 
 class User(UserBase):

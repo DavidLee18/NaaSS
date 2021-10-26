@@ -1,21 +1,21 @@
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Date
 from sqlalchemy.orm import relationship
 
-from .database import Base
+import database
 
 
-class User(Base):
+class User(database.Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True)
     email = Column(String(20), unique=True, index=True)
-    password = Column(String(100))
+    hashed_password = Column(String(100))
     reg_date = Column(Date, nullable=True)
 
     profiles = relationship("Profile", back_populates="owner")
 
 
-class Profile(Base):
+class Profile(database.Base):
     __tablename__ = "profiles"
 
     id = Column(Integer, primary_key=True, index=True)
