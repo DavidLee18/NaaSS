@@ -26,6 +26,15 @@ def create_user(db: Session, user: schemas.UserCreate):
     db.refresh(db_user)
     return db_user
 
+def delete_user(db: Session, user_id: int) -> bool:
+    user = get_user(db, user_id)
+    if user is None:
+        return False
+    else:
+        db.delete(user)
+        db.commit()
+        return True
+
 #profile CRUD
 
 def get_profile(db: Session, profile_id: int):
@@ -53,3 +62,12 @@ def update_profile(db: Session, profile_id: int, profile: schemas.ProfileCreate)
         models.Profile.tel: profile.tel
     })
     db.commit()
+
+def delete_profile(db: Session, profile_id: int) -> bool:
+    profile = get_profile(db, profile_id)
+    if profile is None:
+        return False
+    else:
+        db.delete(profile)
+        db.commit()
+        return True
