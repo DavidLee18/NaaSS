@@ -5,7 +5,7 @@ import Login from './components/Login.vue';
 import store from './store';
 import nginxTrip from './components/NGINX_Trip.vue';
 import signup from './components/SignUp.vue';
-// import notFound from './components/NotFound.vue';
+import notFound from './components/NotFound.vue';
 
 Vue.use(VueRouter);
 
@@ -42,10 +42,10 @@ const router = new VueRouter({
       component: signup,
       beforeEnter: noAuthGuard,
     },
-    // {
-    //   path: '**',
-    //   component: notFound,
-    // },
+    {
+      path: '**',
+      component: notFound,
+    },
   ],
 });
 
