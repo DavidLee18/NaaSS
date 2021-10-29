@@ -142,7 +142,7 @@ export default {
         ],
         passwordAgain: [
           v => !!v || '비밀번호를 다시 입력해 주세요',
-          v => v == this.password || '비밀번호가 일치하지 않습니다'
+          v => v === this.password || '비밀번호가 일치하지 않습니다'
         ],
         username: [v => !!v || '사용자 이름(nickname)을 입력해 주세요'],
       };
@@ -159,10 +159,11 @@ export default {
       if (!this.allValid) return;
       else {
         this.trying = true;
-        this.$store.dispatch('signUp', {
+        this.$store.dispatch('createUserAndLogin', {
           email: this.email,
-          password: this.password,
-          username: this.username
+          password: this.password
+        }).then(() => {
+          this.$store.dispatch('createProfile', { alias: this.username });
         });
         this.trying = false;
         this.progress = 5;

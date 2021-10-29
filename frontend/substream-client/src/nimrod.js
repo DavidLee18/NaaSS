@@ -1,7 +1,7 @@
 import axios from "axios";
 import { handleError } from './functions';
 
-axios.defaults.baseURL = 'http://localhost:8000/api';
+axios.defaults.baseURL = 'http://192.168.251.1/';
 
 const formsHeader = { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } };
 
@@ -13,6 +13,8 @@ export const getMyInfo = () => axios.get('/users/me').catch(handleError);
 
 export const getProfiles = () => axios.get('/profiles').catch(handleError);
 
-export const deleteProfile = (id) => axios.delete(`/profiles/${id}`).catch(handleError);
+export const createProfile = (userId, profile) => axios.post(`/users/${userId}/profiles`, profile).catch(handleError);
 
-export const editProfile = (id) => axios.put(`/profiles/${id}`).then(res => res.status == 200).catch(handleError);
+export const deleteProfile = id => axios.delete(`/profiles/${id}`).then(res => res.status === 200).catch(handleError);
+
+export const editProfile = (id, profile) => axios.put(`/profiles/${id}`, profile).then(res => res.status === 200).catch(handleError);

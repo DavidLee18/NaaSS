@@ -105,29 +105,19 @@ export default {
     mini: true,
   }),
   computed: {
-    loggedIn() {
-      return this.$store.getters.loggedIn;
-    },
-    onTheTrip() {
-      return this.$route.path === '/nginx-trip' && this.$route.query.type > 0;
-    },
+    loggedIn() { return this.$store.getters.loggedIn; },
+    onTheTrip() { return this.$route.path === '/nginx-trip' && this.$route.query.type > 0; },
     presenting() {
       if (this.$route.path === '/nginx-trip') {
         // eslint-disable-next-line vue/no-async-in-computed-properties
         setTimeout(() => { this.mini = true; }, 1000);
         return true;
-      } else {
-        return false;
-      }
+      } else return false;
     }
   },
   methods: {
-    logout() {
-      this.$store.dispatch('logout');
-    },
-    toggleTheme() {
-      this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
-    },
+    logout() { this.$store.dispatch('logout'); },
+    toggleTheme() { this.$vuetify.theme.dark = !this.$vuetify.theme.dark; },
   },
   watch: {
     onTheTrip() {
