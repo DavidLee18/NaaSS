@@ -1,13 +1,14 @@
 import axios from "axios";
+import QueryString from "qs";
 import { handleError } from './functions';
 
 axios.defaults.baseURL = 'http://192.168.251.1/';
 
 const formsHeader = { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } };
 
-export const login = (email, password) => axios.post('/token', { username: email, password }, formsHeader).catch(handleError);
+export const login = (email, password) => axios.post('/token', QueryString.stringify({ username: email, password }), formsHeader).catch(handleError);
 
-export const createUser = (email, password) => axios.post('/users', { username: email, password }, formsHeader).catch(handleError);
+export const createUser = (email, password) => axios.post('/users', QueryString.stringify({ username: email, password }), formsHeader).catch(handleError);
 
 export const getMyInfo = () => axios.get('/users/me').catch(handleError);
 

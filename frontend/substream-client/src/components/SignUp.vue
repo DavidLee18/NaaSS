@@ -129,7 +129,13 @@ export default {
     },
   }),
   computed: {
-    allValid() { return this.valid.values().every(v => v); },
+    allValid() {
+      let v = true;
+      for (const name in this.valid) {
+        v = v && this.valid[name];
+      }
+      return v; 
+    },
     rules() {
       return {
         email: [  
