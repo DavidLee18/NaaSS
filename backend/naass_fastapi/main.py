@@ -30,7 +30,7 @@ app.add_middleware(
     allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
-    allow_heasers=["*"]
+    allow_headers=["*"]
 )
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl='token')
