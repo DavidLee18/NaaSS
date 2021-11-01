@@ -74,7 +74,7 @@ export default {
           if (res && res.status === 200) {
             const profiles = res.data;
             const userId = getters.userId;
-            const profile = profiles.fliter(p => p.owner_id === userId);
+            const profile = profiles.filter(p => p.owner_id === userId);
             if (profile.length > 0) commit('getMyProfile', profile[0]);
           }
         } catch (error) {
