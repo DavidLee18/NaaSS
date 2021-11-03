@@ -2,9 +2,9 @@ import axios from "axios";
 import QueryString from "qs";
 import { handleError } from './functions';
 
-axios.defaults.baseURL = 'http://192.168.251.1/';
+axios.defaults.baseURL = 'http://localhost/api';
 
-const formsHeader = { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } };
+const formsHeader = { headers: { 'Content-Type': 'application/x-www-form-urlencoded', ...axios.defaults.headers }, ...axios.defaults };
 
 export const login = (email, password) => axios.post('/token', QueryString.stringify({ username: email, password }), formsHeader).catch(handleError);
 

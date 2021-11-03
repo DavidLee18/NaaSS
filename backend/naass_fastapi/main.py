@@ -92,11 +92,11 @@ def authenticate_user(username: str, password: str, db: Session):
 
 
 #test
-@app.get('/users/me')
+@app.get('/api/users/me')
 async def read_items(current_user: schemas.UserCreate = Depends(get_current_user)):
     return current_user
 
-@app.post('/token', response_model=schemas.Token)
+@app.post('/api/token', response_model=schemas.Token)
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     user = authenticate_user(form_data.username, form_data.password, db)
     if not user:
@@ -109,7 +109,7 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     return { 'access_token': access_token, 'token_type': 'bearer' }
 
 #real apis
-@app.post("/users", status_code=status.HTTP_201_CREATED)
+@app.post("/api/users", status_code=status.HTTP_201_CREATED)
 async def create_user(user_form: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     db_user = crud.get_user_by_email(db, email=user_form.username)
     if db_user:
@@ -120,19 +120,19 @@ async def create_user(user_form: OAuth2PasswordRequestForm = Depends(), db: Sess
         ))
 
 
-@app.get("/users")
+@app.get("/api/users")
 async def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db), current_user: schemas.UserCreate = Depends(get_current_user)):
     return crud.get_users(db, skip=skip, limit=limit)
 
 
-@app.get("/users/{user_id}")
+@app.get("/api/users/{user_id}")
 async def read_user(user_id: int, db: Session = Depends(get_db), current_user: schemas.UserCreate = Depends(get_current_user)):
     db_user = crud.get_user(db, user_id=user_id)
     if db_user is None:
         raise HTTPException(status_code=404, detail="User not found")
     return db_user
 
-@app.delete('/users/{user_id}')
+@app.delete('/api/users/{user_id}')
 async def delete_user(user_id: int, db: Session = Depends(get_db), current_user: schemas.UserCreate = Depends(get_current_user)):
     succeeded = crud.delete_user(db, user_id)
     if not succeeded:
@@ -142,24 +142,24 @@ async def delete_user(user_id: int, db: Session = Depends(get_db), current_user:
         )
 
 
-@app.post("/users/{user_id}/profiles", status_code=status.HTTP_201_CREATED)
+@app.post("/api/users/{user_id}/profiles", status_code=status.HTTP_201_CREATED)
 async def create_profile_for_user(user_id: int, profile: schemas.ProfileCreate, db: Session = Depends(get_db), current_user: schemas.UserCreate = Depends(get_current_user)):
     return crud.create_profile(db=db, profile=profile, user_id=user_id)
 
 
-@app.get("/profiles")
+@app.get("/api/profiles")
 async def read_profiles(skip: int = 0, limit: int = 100, db: Session = Depends(get_db), current_user: schemas.UserCreate = Depends(get_current_user)):
     return crud.get_profiles(db, skip=skip, limit=limit)
 
 
-@app.put('/profiles/{profile_id}')
+@app.put('/api/profiles/{profile_id}')
 async def edit_profile(profile_id: int, profile: schemas.ProfileCreate, db: Session = Depends(get_db), current_user: schemas.UserCreate = Depends(get_current_user)):
     db_profile = crud.get_profile(db, profile_id)
     if db_profile is None:
         raise HTTPException(400, 'profile not found')
     return crud.update_profile(db, profile_id, profile)
 
-@app.delete('/profiles/{profile_id}')
+@app.delete('/api/profiles/{profile_id}')
 async def delete_profile(profile_id: int, db: Session = Depends(get_db), current_user: schemas.UserCreate = Depends(get_current_user)):
     succeeded = crud.delete_profile(db, profile_id)
     if not succeeded:
