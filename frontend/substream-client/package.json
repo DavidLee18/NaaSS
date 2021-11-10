@@ -4,9 +4,10 @@
   "private": true,
   "scripts": {
     "ui": "vue ui --dev --headless",
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "serve": "node --max_old_space_size=4096 node_modules/@vue/cli-service/bin/vue-cli-service.js serve",
+    "build": "node --max_old_space_size=4096 node_modules/@vue/cli-service/bin/vue-cli-service.js build --open",
     "dev-build": "vue-cli-service build --mode development",
+    "prebuild": "node --max_old_space_size=4096 ./node_modules/rimraf/bin.js ./node_modules/.cache",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
@@ -15,6 +16,7 @@
     "intro.js": "^4.2.2",
     "js-cookie": "^3.0.1",
     "qs": "^6.10.1",
+    "rimraf": "^3.0.2",
     "vue": "^2.6.11",
     "vue-router": "^3.5.3",
     "vuetify": "^2.5.10",

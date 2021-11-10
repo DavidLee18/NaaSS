@@ -2,7 +2,10 @@ import axios from "axios";
 import QueryString from "qs";
 import { handleError } from './functions';
 
-axios.defaults.baseURL = 'http://localhost/api';
+axios.defaults.baseURL = 'https://ntest.nginxplus.co.kr/api';
+axios.defaults.withCredentials = true;
+axios.defaults.headers['Access-Control-Allow-Origin'] = '*';
+axios.defaults.headers['Access-Control-Allow-Headers'] = '*';
 
 const formsHeader = { headers: { 'Content-Type': 'application/x-www-form-urlencoded', ...axios.defaults.headers }, ...axios.defaults };
 
