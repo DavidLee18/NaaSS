@@ -34,7 +34,7 @@ app.add_middleware(
     allow_headers=["*"]
 )
 
-app.mount('/', StaticFiles(directory='dist'), 'dist')
+#app.mount('/', StaticFiles(directory='dist'), 'dist')
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl='token')
 
