@@ -36,7 +36,7 @@
       </v-container>
     </section>
     <section v-else>
-      <v-alert :value="tripError" type="warning" transition="scale-transition">
+      <v-alert v-if="false" :value="tripError" type="warning" transition="scale-transition">
         <v-row align="center">
           <v-col class="grow">
             NGINX 체험관 이용에 문제가 있나요? 다른 체험관을 이용해 보세요

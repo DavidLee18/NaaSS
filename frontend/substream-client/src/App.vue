@@ -85,7 +85,7 @@
     <v-main>
       <v-container fluid pa-0>
         <v-alert 
-          v-if="$store.getters.errorMessage" 
+          v-if="$store.getters.errorMessage && false" 
           outlined 
           type="error">
             오류가 발생했습니다: {{$store.getters.errorMessage}}
