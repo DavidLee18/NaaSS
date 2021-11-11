@@ -6,7 +6,7 @@
       </v-flex>
     </v-layout>
     <v-card-title>E-mail 로 로그인하세요</v-card-title>
-    <v-form v-model="valid" ref="form">
+    <v-form v-model="valid" ref="form" @submit="validateAndReport">
       <v-card-text>
         <v-text-field
           v-model="email"
@@ -24,6 +24,7 @@
           required
           outlined
           @click:append="passwordVisible = !passwordVisible"
+          @keyup.enter="validateAndReport"
         ></v-text-field>
       </v-card-text>
       <v-card-actions>

@@ -32,7 +32,8 @@
                 type="email" 
                 label="E-mail *" 
                 required 
-                outlined></v-text-field>
+                outlined
+                @keyup.enter="validateAndProceed('email', 2)"></v-text-field>
             </v-form>
           </v-card>
           <v-btn color="primary" @click="validateAndProceed('email', 2)"> 다음 </v-btn>
@@ -47,7 +48,8 @@
                 :rules="rules.username"
                 label="사용자 이름(nickname) *" 
                 required 
-                outlined></v-text-field>
+                outlined
+                @keyup.enter="validateAndProceed('username', 3)"></v-text-field>
             </v-form>
           </v-card>
           <v-btn color="primary" @click="validateAndProceed('username', 3)"> 다음 </v-btn>
@@ -66,7 +68,8 @@
                 required
                 minlength="6"
                 outlined
-                @click:append="passwordVisible = !passwordVisible"></v-text-field>
+                @click:append="passwordVisible = !passwordVisible"
+                @keyup.enter="validateAndProceed('password', 4)"></v-text-field>
             </v-form>
           </v-card>
           <v-btn color="primary" @click="validateAndProceed('password', 4)"> 다음 </v-btn>
@@ -84,7 +87,8 @@
                 label="비밀번호 확인 *" 
                 required
                 outlined
-                @click:append="passwordAgainVisible = !passwordAgainVisible"></v-text-field>
+                @click:append="passwordAgainVisible = !passwordAgainVisible"
+                @keyup.enter="validateAndSignUp"></v-text-field>
             </v-form>
           </v-card>
           <v-btn 
