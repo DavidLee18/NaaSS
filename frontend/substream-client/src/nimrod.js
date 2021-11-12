@@ -2,7 +2,7 @@ import axios from "axios";
 import QueryString from "qs";
 import { handleError } from './functions';
 
-axios.defaults.baseURL = 'https://ntest.nginxplus.co.kr/api';
+axios.defaults.baseURL = 'https://naass.nginxplus.co.kr/api';
 axios.defaults.withCredentials = true;
 axios.defaults.headers['Access-Control-Allow-Origin'] = '*';
 axios.defaults.headers['Access-Control-Allow-Headers'] = '*';
