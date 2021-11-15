@@ -1,8 +1,9 @@
 from datetime import datetime, timedelta
 from typing import Final, List, Optional
 
-from fastapi import Depends, FastAPI, HTTPException, status
+from fastapi import Depends, FastAPI, HTTPException, status, Cookie
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import Response
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from fastapi.staticfiles import StaticFiles
 from jose import JWTError, jwt
@@ -61,14 +62,16 @@ def create_access_token(data: dict, expires_delta: timedelta = timedelta(minutes
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
-async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+async def get_current_user(access: Optional[str] = Cookie(None), db: Session = Depends(get_db)):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail='Invalid Authentication Credentials',
         headers={ 'WWW-Authenticate': 'Bearer' },
     )
     try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        if access is None:
+            raise credentials_exception
+        payload = jwt.decode(access, SECRET_KEY, algorithms=[ALGORITHM])
         username: Optional[str] = payload.get('sub')
         if username is None:
             raise credentials_exception
@@ -106,7 +109,9 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
             headers={ 'WWW-Authenticate': 'Bearer' }
         )
     access_token = create_access_token({ 'sub': user.email }, ACCESS_TOKEN_EXPIRE_TIME)
-    return { 'access_token': access_token, 'token_type': 'bearer' }
+    res = Response()
+    res.set_cookie("access", access_token, expires=ACCESS_TOKEN_EXPIRE_TIME.seconds, secure=True, httponly=True)
+    return res
 
 #real apis
 @app.post("/api/users", status_code=status.HTTP_201_CREATED)

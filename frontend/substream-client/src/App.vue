@@ -119,6 +119,7 @@ export default {
     logout() { this.$store.dispatch('logout'); },
     toggleTheme() { this.$vuetify.theme.dark = !this.$vuetify.theme.dark; },
   },
+  mounted() { this.$store.dispatch('getMyProfile'); },
   watch: {
     onTheTrip() {
       if(this.onTheTrip) {
