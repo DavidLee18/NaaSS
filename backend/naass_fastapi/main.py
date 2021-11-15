@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 from typing import Final, List, Optional
 
 from fastapi import Depends, FastAPI, HTTPException, status, Cookie
+import fastapi
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
@@ -99,8 +100,8 @@ def authenticate_user(username: str, password: str, db: Session):
 async def read_items(current_user: schemas.UserCreate = Depends(get_current_user)):
     return current_user
 
-@app.post('/api/token', response_model=schemas.Token)
-async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+@app.post('/api/token')
+async def login_for_access_token(res: Response, form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     user = authenticate_user(form_data.username, form_data.password, db)
     if not user:
         raise HTTPException(
@@ -109,8 +110,12 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
             headers={ 'WWW-Authenticate': 'Bearer' }
         )
     access_token = create_access_token({ 'sub': user.email }, ACCESS_TOKEN_EXPIRE_TIME)
-    res = Response()
     res.set_cookie("access", access_token, expires=ACCESS_TOKEN_EXPIRE_TIME.seconds, secure=True, httponly=True)
+    return res
+
+@app.delete('/api/token')
+async def logout(res: Response, current_user: schemas.UserCreate = Depends(get_current_user)):
+    res.delete_cookie('access')
     return res
 
 #real apis
