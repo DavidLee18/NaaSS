@@ -11,6 +11,8 @@ const formsHeader = { headers: { 'Content-Type': 'application/x-www-form-urlenco
 
 export const login = (email, password) => axios.post('/token', QueryString.stringify({ username: email, password }), formsHeader).catch(handleError);
 
+export const logout = () => axios.delete('/token').then(res => res.status == 200).catch(handleError);
+
 export const createUser = (email, password) => axios.post('/users', QueryString.stringify({ username: email, password }), formsHeader).catch(handleError);
 
 export const getMyInfo = () => axios.get('/users/me').catch(handleError);

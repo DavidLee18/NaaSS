@@ -1,4 +1,3 @@
-import axios from 'axios';
 import * as nimrod from '../../nimrod';
 import router from '../../router';
 
@@ -6,24 +5,23 @@ export default {
     state: () => ({
       user: null,
       profile: null,
-      token: null
+      loggedIn: false
     }),
     mutations: {
         getMyInfo(state, user) { state.user = user; },
         getMyProfile(state, profile) { state.profile = profile },
-        login(state, token) { state.token = token; },
-        logout(state) { [state.user, state.profile, state.token] = [null, null, null]; },
+        login(state) { state.loggedIn = true; },
+        logout(state) { [state.user, state.profile, state.loggedIn] = [null, null, false]; },
     },
     actions: {
       async login({ commit, dispatch }, { email, password }) {
         try {
           const res = await nimrod.login(email, password);
           if(res && res.status === 200) {
-            const token = res.data.access_token;
             console.log('successfully logged in');
-            commit('login', token);
-            axios.defaults.headers['Authorization'] = `Bearer ${token}`;
-            await dispatch('getMyInfo'); await dispatch('getMyProfile');
+            commit('login');
+            await dispatch('getMyInfo');
+            await dispatch('getMyProfile');
             router.push('dashboard');
           }
         } catch (error) {
@@ -32,9 +30,11 @@ export default {
         }
       },
       async logout({ commit }) {
+        const loggedOut = await nimrod.logout();
+        if(loggedOut) {
           commit('logout');
-          axios.defaults.headers['Authorization'] = null;
           router.push('login');
+        }
       },
       async createUserAndLogin({ commit, dispatch }, { email, password }) {
         try {
@@ -44,10 +44,9 @@ export default {
             commit('getMyInfo', user);
             const res2 = await nimrod.login(email, password);
             if(res2 && res2.status === 200) {
-                const token = res2.data.access_token;
-                commit('login', token);
-                axios.defaults.headers['Authorization'] = `Bearer ${token}`;
-                await dispatch('getMyInfo'); await dispatch('getMyProfile');
+                commit('login');
+                await dispatch('getMyInfo');
+                await dispatch('getMyProfile');
             }
           }
         } catch (error) {
