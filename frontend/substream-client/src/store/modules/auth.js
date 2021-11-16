@@ -8,8 +8,8 @@ export default {
       loggedIn: false
     }),
     mutations: {
-        getMyInfo(state, user) { state.user = user; },
-        getMyProfile(state, profile) { state.profile = profile },
+        getMyInfo(state, user) { [state.user, state.loggedIn] = [user, true]; },
+        getMyProfile(state, profile) { [state.profile, state.loggedIn] = [profile, true]; },
         login(state) { state.loggedIn = true; },
         logout(state) { [state.user, state.profile, state.loggedIn] = [null, null, false]; },
     },
