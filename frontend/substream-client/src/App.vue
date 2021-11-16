@@ -107,7 +107,8 @@ export default {
     mini: true,
   }),
   computed: {
-    loggedIn() { return this.$store.getters.loggedIn; },
+    dark() { return this.$store.getters.dark },
+    loggedIn() { return this.$store.getters.loggedIn },
     onTheTrip() { return this.$route.path === '/nginx-trip' && this.$route.query.type > 0; },
     presenting() {
       if (this.$route.path === '/nginx-trip') {
@@ -121,8 +122,13 @@ export default {
     logout() { this.$store.dispatch('logout'); },
     toggleTheme() { this.$vuetify.theme.dark = !this.$vuetify.theme.dark; },
   },
-  mounted() { this.$store.dispatch('getMyProfile'); },
+  mounted() {
+    this.$store.dispatch('getMyProfile');
+    this.$store.dispatch('listenToSystem');
+    this.$store.dispatch('listenToPreference');
+  },
   watch: {
+    dark(val) { this.$vuetify.theme.dark = val },
     onTheTrip() {
       if(this.onTheTrip) {
         this.loadIFrame = true;

@@ -22,6 +22,7 @@ class Profile(database.Base):
     name = Column(String(20), index=True)
     alias = Column(String(20), index=True)
     department = Column(String(20))
+    prefer_dark = Column(Boolean, default=False)
     tel = Column(String(20))
     owner_id = Column(Integer, ForeignKey("users.id"))
 
