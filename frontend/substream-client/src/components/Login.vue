@@ -56,6 +56,9 @@ export default {
       password: [ v => !!v || '비밀번호를 입력해 주세요' ],
     },
   }),
+  computed: {
+    loggedIn() { return this.$store.getters.loggedIn; }
+  },
   methods: {
     validateAndReport() {
       this.valid = this.$refs.form.validate();
@@ -69,8 +72,14 @@ export default {
         this.trying = false;
         //this.$router.push({name: 'Dashboard'});
       }
-    },
+    }
   },
+  watch: {
+    loggedIn(val) {
+      if(val) this.$router.push({name: 'Dashboard'});
+      else return;
+    }
+  }
 
 };
 </script>

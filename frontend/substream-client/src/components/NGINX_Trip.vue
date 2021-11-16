@@ -122,6 +122,7 @@ export default {
       const height = this.tripError ? 85 : 95;
       return { height: `${height}vh` };
     },
+    loggedIn() { return this.$store.getters.loggedIn },
     onTheTrip() {
       return this.$route.query.type > 0;
     },
@@ -148,6 +149,10 @@ export default {
     }
   },
   watch: {
+    loggedIn(val) {
+      if(!val) this.$router.push({name: 'Login'});
+      else return;
+    },
     onTheTrip() {
       if(!this.onTheTrip) this.tripError = false;
       else setTimeout(() => {
