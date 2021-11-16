@@ -54,7 +54,7 @@
         <v-icon>arrow_back</v-icon>
       </v-btn>
 
-      <v-toolbar-title>NaaSS</v-toolbar-title>
+      <v-toolbar-title to="/dashboard">NaaSS</v-toolbar-title>
 
       <v-spacer></v-spacer>
 
