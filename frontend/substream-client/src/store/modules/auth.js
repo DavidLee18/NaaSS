@@ -104,7 +104,7 @@ export default {
       }
     },
     getters: {
-      loggedIn: state => !!state.token,
+      loggedIn: state => state.loggedIn,
       name: state => state.profile ? state.profile.name : null,
       alias: state => state.profile ? state.profile.alias : null,
       email: state => state.user ? state.user.email : null,
