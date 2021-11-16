@@ -120,7 +120,12 @@ export default {
   },
   methods: {
     logout() { this.$store.dispatch('logout'); },
-    toggleTheme() { this.$vuetify.theme.dark = !this.$vuetify.theme.dark; },
+    toggleTheme() {
+      const newDark = !this.$vuetify.theme.dark;
+      this.$vuetify.theme.dark = newDark;
+      if(newDark) this.$store.dispatch('preferDark');
+      else this.$store.dispatch('preferWhite');
+    },
   },
   mounted() {
     this.$store.dispatch('getMyProfile');
