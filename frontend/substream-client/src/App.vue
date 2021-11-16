@@ -54,8 +54,8 @@
         <v-icon>arrow_back</v-icon>
       </v-btn>
 
-      <v-toolbar-title>
-        <v-btn text to="dashboard">NaaSS</v-btn>
+      <v-toolbar-title @click="$router.push({ name: 'Dashboard' })">
+        <button>NaaSS</button>
       </v-toolbar-title>
 
       <v-spacer></v-spacer>
