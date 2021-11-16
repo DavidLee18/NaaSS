@@ -26,6 +26,7 @@ export default {
           }
         } catch (error) {
           console.error(error);
+          commit('logout');
           await dispatch('setError', error.message);
         }
       },
@@ -51,6 +52,7 @@ export default {
           }
         } catch (error) {
           console.error(error);
+          commit('logout');
           await dispatch('setError', error.message);
         }
       },
@@ -63,6 +65,7 @@ export default {
           }
         } catch (error) {
           console.error(error);
+          commit('logout');
           await dispatch('setError', error.message);
         }
       },
@@ -78,6 +81,7 @@ export default {
           }
         } catch (error) {
           console.error(error);
+          commit('logout');
           await dispatch('setError', error.message);
         }
       },
