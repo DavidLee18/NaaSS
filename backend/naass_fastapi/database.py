@@ -5,7 +5,7 @@ from sqlalchemy.orm import sessionmaker
 #mysql+pymysql://{username}:{password}@{host}:{port}/{db}
 SQLALCHEMY_DATABASE_URL = "mysql+pymysql://naass_user:mail1234@192.168.251.251:3306/naass_db"
 
-engine = create_engine(SQLALCHEMY_DATABASE_URL)
+engine = create_engine(SQLALCHEMY_DATABASE_URL, pool_pre_ping=True, pool_recycle=300)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
