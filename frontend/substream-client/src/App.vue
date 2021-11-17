@@ -19,7 +19,7 @@
         <v-list-item v-if="!mini">
           <v-list-item-content>
             <v-list-item-title class="text-h6">
-              안녕하세요
+              안녕하세요 {{$store.getters.alias ? $store.getters.alias + '님' : ''}}
             </v-list-item-title>
             <v-list-item-subtitle>{{$store.getters.email}}</v-list-item-subtitle>
           </v-list-item-content>
