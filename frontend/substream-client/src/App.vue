@@ -123,7 +123,7 @@ export default {
     logout() { this.$store.dispatch('logout'); },
     toggleTheme() {
       const newDark = !this.$vuetify.theme.dark;
-      this.$vuetify.theme.dark = newDark;
+      // this.$vuetify.theme.dark = newDark;
       if(newDark) this.$store.dispatch('preferDark');
       else this.$store.dispatch('preferWhite');
     },
