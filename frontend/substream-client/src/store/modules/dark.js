@@ -32,7 +32,7 @@ export default {
             try {
                 await dispatch('getMyProfile');
                 const profile = rootState.auth.profile;
-                const newProfile = { prefer_dark: true, ...profile };
+                const newProfile = { ...profile, prefer_dark: true };
                 await dispatch('editProfile', newProfile);
                 commit('preferDark');
             } catch (error) {
@@ -44,7 +44,7 @@ export default {
             try {
                 await dispatch('getMyProfile');
                 const profile = rootState.auth.profile;
-                const newProfile = { prefer_dark: false, ...profile };
+                const newProfile = { ...profile, prefer_dark: false };
                 await dispatch('editProfile', newProfile);
                 commit('preferWhite');
             } catch (error) {
