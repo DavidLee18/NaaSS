@@ -9,9 +9,10 @@
       <v-list>
         <v-list-item class="px-2">
           <v-list-item-avatar>
-            <v-img
+            <v-img v-if="false"
               src="https://randomuser.me/api/portraits/women/85.jpg"
             ></v-img>
+            <v-icon>account_circle</v-icon>
           </v-list-item-avatar>
         </v-list-item>
 
