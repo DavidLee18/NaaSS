@@ -134,7 +134,7 @@ export default {
     this.$store.dispatch('listenToPreference');
   },
   watch: {
-    dark(val) { this.$vuetify.theme.dark = val },
+    dark(val) { console.log(`dark: ${val}`); this.$vuetify.theme.dark = val },
     onTheTrip() {
       if(this.onTheTrip) {
         this.loadIFrame = true;
