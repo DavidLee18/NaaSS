@@ -25,7 +25,6 @@ export default {
                 else commit('preferWhite');
             } catch (error) {
                 console.error(error);
-                await dispatch('logout');
                 await dispatch('setError', error.message);
             }
         },
@@ -38,7 +37,6 @@ export default {
                 commit('preferDark');
             } catch (error) {
                 console.error(error);
-                await dispatch('logout');
                 await dispatch('setError', error.message);
             }
         },
@@ -51,7 +49,6 @@ export default {
                 commit('preferWhite');
             } catch (error) {
                 console.error(error);
-                await dispatch('logout');
                 await dispatch('setError', error.message);
             }
         },
