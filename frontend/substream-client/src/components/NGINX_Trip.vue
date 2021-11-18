@@ -36,7 +36,7 @@
       </v-container>
     </section>
     <section v-else>
-      <v-alert v-if="false" :value="tripError" type="warning" transition="scale-transition">
+      <!-- <v-alert v-if="false" :value="tripError" type="warning" transition="scale-transition">
         <v-row align="center">
           <v-col class="grow">
             NGINX 체험관 이용에 문제가 있나요? 다른 체험관을 이용해 보세요
@@ -45,11 +45,11 @@
             <v-btn @click="$router.push('/nginx-trip')">다른 체험관 보기</v-btn>
           </v-col>
         </v-row>
-      </v-alert>
+      </v-alert> -->
       <iframe id="portal" :sandbox="sandboxStatement"
       :src="selectedTrip.source" frameBorder="0"
       @error="handleIFrameError($event)" :style="heightStyle"></iframe>
-      <v-dialog
+      <!-- <v-dialog
         v-if="false"
         persistent
         max-width="290"
@@ -72,7 +72,7 @@
             </v-btn>
           </v-card-actions>
         </v-card>
-      </v-dialog>
+      </v-dialog> -->
     </section>
   </div>
 </template>

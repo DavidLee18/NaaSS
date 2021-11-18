@@ -28,24 +28,18 @@ export default {
                 await dispatch('setError', error.message);
             }
         },
-        async preferDark({ commit, dispatch, rootState }) {
+        async preferDark({ commit, dispatch }) {
             try {
-                await dispatch('getMyProfile');
-                const profile = rootState.auth.profile;
-                const newProfile = { ...profile, prefer_dark: true };
-                await dispatch('editProfile', newProfile);
+                await dispatch('editProfile', { prefer_dark: true });
                 commit('preferDark');
             } catch (error) {
                 console.error(error);
                 await dispatch('setError', error.message);
             }
         },
-        async preferWhite({ commit, dispatch, rootState }) {
+        async preferWhite({ commit, dispatch }) {
             try {
-                await dispatch('getMyProfile');
-                const profile = rootState.auth.profile;
-                const newProfile = { ...profile, prefer_dark: false };
-                await dispatch('editProfile', newProfile);
+                await dispatch('editProfile', { prefer_dark: false });
                 commit('preferWhite');
             } catch (error) {
                 console.error(error);

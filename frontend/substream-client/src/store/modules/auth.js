@@ -95,9 +95,9 @@ export default {
           await dispatch('setError', error.message);
         }
       },
-      async editProfile({ dispatch, getters }, profile) {
+      async editProfile({ state, dispatch, getters }, profile) {
         try {
-          const edited = await nimrod.editProfile(getters.profileId, profile);
+          const edited = await nimrod.editProfile(getters.profileId, { ...state.profile, ...profile });
           if (edited) await dispatch('getMyProfile');
         } catch (error) {
           console.error(error);

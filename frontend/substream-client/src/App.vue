@@ -7,11 +7,27 @@
       app
     >
       <v-list>
-        <v-list-item class="px-2">
+        <v-tooltip bottom v-if="mini">
+          <template v-slot:activator="{ on, attrs }">
+            <v-list-item class="px-2" v-bind="attrs" v-on="on">
+              <v-list-item-avatar>
+                <!-- <v-img v-if="false"
+                  src="https://randomuser.me/api/portraits/women/85.jpg"
+                ></v-img> -->
+                <v-icon>account_circle</v-icon>
+              </v-list-item-avatar>
+            </v-list-item>
+          </template>
+          <p>NaaSS 계정</p>
+          <p>{{$store.getters.alias}}</p>
+          <p>{{$store.getters.email}}</p>
+        </v-tooltip>
+
+        <v-list-item class="px-2" v-if="!mini">
           <v-list-item-avatar>
-            <v-img v-if="false"
+            <!-- <v-img v-if="false"
               src="https://randomuser.me/api/portraits/women/85.jpg"
-            ></v-img>
+            ></v-img> -->
             <v-icon>account_circle</v-icon>
           </v-list-item-avatar>
         </v-list-item>
@@ -19,9 +35,60 @@
         <v-list-item v-if="!mini">
           <v-list-item-content>
             <v-list-item-title class="text-h6">
-              안녕하세요 {{$store.getters.alias ? $store.getters.alias + '님' : ''}}
+              {{$store.getters.alias}}
             </v-list-item-title>
             <v-list-item-subtitle>{{$store.getters.email}}</v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+
+        <v-list-item v-if="!mini">
+          <v-list-item-content>
+            <v-dialog v-model="toEditProfile" persistent width="500">
+              <template v-slot:activator="{ on, attrs }">
+                <v-list-item-title v-bind="attrs" v-on="on">
+                  프로필 수정
+                </v-list-item-title>
+              </template>
+
+              <v-card>
+                <v-card-title>
+                  프로필 수정
+                </v-card-title>
+
+                <v-card-text>
+                  <v-container>
+                    <v-row>
+                      <v-col cols="12" sm="6" md="4">
+                        <v-text-field v-model="profile.alias" label="별칭 *" required/>
+                      </v-col>
+                      <v-col cols="12" sm="6" md="4">
+                        <v-text-field v-model="profile.name" label="이름"/>
+                      </v-col>
+                      <v-col cols="12" sm="6" md="4">
+                        <v-text-field v-model="profile.department" label="소속"/>
+                      </v-col>
+                      <v-col cols="12" sm="6" md="4">
+                        <v-text-field v-model="profile.tel" label="전화번호" type="tel"/>
+                      </v-col>
+                    </v-row>
+                  </v-container>
+                </v-card-text>
+
+                <v-divider></v-divider>
+
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn
+                    color="primary"
+                    text
+                    @click="updateProfile"
+                  >
+                    저장
+                  </v-btn>
+                  <v-btn text @click="toEditProfile = false"></v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -87,13 +154,13 @@
 
     <v-main>
       <v-container fluid pa-0>
-        <v-alert 
+        <!-- <v-alert 
           v-if="$store.getters.errorMessage && false" 
           outlined 
           type="error">
             오류가 발생했습니다: {{$store.getters.errorMessage}}
-        </v-alert>
-        <div v-if="$store.getters.errorHtml" :v-html="$store.getters.errorHtml"></div>
+        </v-alert> -->
+        <!-- <div v-if="$store.getters.errorHtml" :v-html="$store.getters.errorHtml"></div> -->
         <router-view />
       </v-container>
     </v-main>
@@ -106,6 +173,14 @@ export default {
   data: () => ({
     loadIFrame: false,
     mini: true,
+    profile: {
+      alias: '',
+      name: '',
+      department: '',
+      tel: '',
+    },
+    rule: [ v => !!v || '별칭을 입력해 주세요' ],
+    toEditProfile: false
   }),
   computed: {
     dark() { return this.$store.getters.dark },
@@ -127,9 +202,14 @@ export default {
       if(newDark) this.$store.dispatch('preferDark');
       else this.$store.dispatch('preferWhite');
     },
+    updateProfile() {
+      this.$store.dispatch('editProfile', this.profile)
+      .finally(() => this.toEditProfile = false);
+    }
   },
   mounted() {
     this.$store.dispatch('getMyProfile');
+    this.profile = this.$store.state.auth.profile;
     this.$store.dispatch('listenToSystem');
     this.$store.dispatch('listenToPreference');
   },
