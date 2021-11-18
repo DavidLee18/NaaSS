@@ -85,7 +85,7 @@
                   >
                     저장
                   </v-btn>
-                  <v-btn text @click="toEditProfile = false"></v-btn>
+                  <v-btn text @click="toEditProfile = false">취소</v-btn>
                 </v-card-actions>
               </v-card>
             </v-dialog>
