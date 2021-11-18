@@ -85,7 +85,7 @@
                   >
                     저장
                   </v-btn>
-                  <v-btn text @click="toEditProfile = false">취소</v-btn>
+                  <v-btn text @click="toEditProfile = false; resetProfile()">취소</v-btn>
                 </v-card-actions>
               </v-card>
             </v-dialog>
@@ -196,6 +196,14 @@ export default {
   },
   methods: {
     logout() { this.$store.dispatch('logout'); },
+    resetProfile() {
+      this.profile = {
+        alias: '',
+        name: '',
+        department: '',
+        tel: ''
+      };
+    },
     toggleTheme() {
       const newDark = !this.$vuetify.theme.dark;
       this.$vuetify.theme.dark = newDark;
@@ -204,7 +212,10 @@ export default {
     },
     updateProfile() {
       this.$store.dispatch('editProfile', this.profile)
-      .finally(() => this.toEditProfile = false);
+      .finally(() => {
+        this.toEditProfile = false;
+        this.resetProfile();
+      });
     }
   },
   mounted() {
