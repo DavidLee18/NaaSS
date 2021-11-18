@@ -208,8 +208,9 @@ export default {
     }
   },
   mounted() {
-    this.$store.dispatch('getMyProfile');
-    this.profile = this.$store.state.auth.profile;
+    this.$store.dispatch('getMyProfile').then(() => {
+      this.profile = this.$store.state.auth.profile;
+    });
     this.$store.dispatch('listenToSystem');
     this.$store.dispatch('listenToPreference');
   },
