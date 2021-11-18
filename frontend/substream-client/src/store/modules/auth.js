@@ -109,6 +109,8 @@ export default {
       loggedIn: state => state.loggedIn,
       name: state => state.profile ? state.profile.name : null,
       alias: state => state.profile ? state.profile.alias : null,
+      department: state => state.profile ? state.profile.department : null,
+      tel: state => state.profile ? state.profile.tel : null,
       email: state => state.user ? state.user.email : null,
       userId: state => state.user ? state.user.id : null,
       profileId: state => state.profile ? state.profile.id : null,

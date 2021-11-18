@@ -209,7 +209,10 @@ export default {
   },
   mounted() {
     this.$store.dispatch('getMyProfile').then(() => {
-      this.profile = this.$store.state.auth.profile;
+      this.profile.alias = this.$store.getters.alias;
+      this.profile.name = this.$store.getters.name;
+      this.profile.department = this.$store.getters.department;
+      this.profile.tel = this.$store.getters.tel;
     });
     this.$store.dispatch('listenToSystem');
     this.$store.dispatch('listenToPreference');
