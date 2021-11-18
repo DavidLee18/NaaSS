@@ -60,16 +60,21 @@
                     <v-container>
                       <v-row>
                         <v-col cols="12" sm="6" md="4">
-                          <v-text-field v-model="profile.alias" :rules="rule" label="별칭 *" required/>
+                          <v-text-field 
+                            v-model="profile.alias"
+                            :rules="rule"
+                            label="별칭 *"
+                            outlined
+                            required/>
                         </v-col>
                         <v-col cols="12" sm="6" md="4">
-                          <v-text-field v-model="profile.name" label="이름"/>
+                          <v-text-field v-model="profile.name" outlined label="이름"/>
                         </v-col>
                         <v-col cols="12" sm="6" md="4">
-                          <v-text-field v-model="profile.department" label="소속"/>
+                          <v-text-field v-model="profile.department" label="소속" outlined/>
                         </v-col>
                         <v-col cols="12" sm="6" md="4">
-                          <v-text-field v-model="profile.tel" label="전화번호" type="tel"/>
+                          <v-text-field v-model="profile.tel" label="전화번호" type="tel" outlined/>
                         </v-col>
                       </v-row>
                     </v-container>
