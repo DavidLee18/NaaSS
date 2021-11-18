@@ -50,44 +50,47 @@
                 </v-list-item-title>
               </template>
 
-              <v-card>
-                <v-card-title>
-                  프로필 수정
-                </v-card-title>
+              <v-form v-model="valid" ref="form" @submit="updateProfile">
+                <v-card>
+                  <v-card-title>
+                    프로필 수정
+                  </v-card-title>
 
-                <v-card-text>
-                  <v-container>
-                    <v-row>
-                      <v-col cols="12" sm="6" md="4">
-                        <v-text-field v-model="profile.alias" label="별칭 *" required/>
-                      </v-col>
-                      <v-col cols="12" sm="6" md="4">
-                        <v-text-field v-model="profile.name" label="이름"/>
-                      </v-col>
-                      <v-col cols="12" sm="6" md="4">
-                        <v-text-field v-model="profile.department" label="소속"/>
-                      </v-col>
-                      <v-col cols="12" sm="6" md="4">
-                        <v-text-field v-model="profile.tel" label="전화번호" type="tel"/>
-                      </v-col>
-                    </v-row>
-                  </v-container>
-                </v-card-text>
+                  <v-card-text>
+                    <v-container>
+                      <v-row>
+                        <v-col cols="12" sm="6" md="4">
+                          <v-text-field v-model="profile.alias" :rules="rule" label="별칭 *" required/>
+                        </v-col>
+                        <v-col cols="12" sm="6" md="4">
+                          <v-text-field v-model="profile.name" label="이름"/>
+                        </v-col>
+                        <v-col cols="12" sm="6" md="4">
+                          <v-text-field v-model="profile.department" label="소속"/>
+                        </v-col>
+                        <v-col cols="12" sm="6" md="4">
+                          <v-text-field v-model="profile.tel" label="전화번호" type="tel"/>
+                        </v-col>
+                      </v-row>
+                    </v-container>
+                  </v-card-text>
 
-                <v-divider></v-divider>
+                  <v-divider></v-divider>
 
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn
-                    color="primary"
-                    text
-                    @click="updateProfile"
-                  >
-                    저장
-                  </v-btn>
-                  <v-btn text @click="toEditProfile = false; resetProfile()">취소</v-btn>
-                </v-card-actions>
-              </v-card>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                      color="primary"
+                      text
+                      :disabled="!valid"
+                      @click="updateProfile"
+                    >
+                      저장
+                    </v-btn>
+                    <v-btn text @click="toEditProfile = false; resetProfile()">취소</v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-form>
             </v-dialog>
           </v-list-item-content>
         </v-list-item>
@@ -180,7 +183,8 @@ export default {
       tel: '',
     },
     rule: [ v => !!v || '별칭을 입력해 주세요' ],
-    toEditProfile: false
+    toEditProfile: false,
+    valid: false
   }),
   computed: {
     dark() { return this.$store.getters.dark },
@@ -211,7 +215,9 @@ export default {
       else this.$store.dispatch('preferWhite');
     },
     updateProfile() {
-      this.$store.dispatch('editProfile', this.profile)
+      this.valid = this.$refs.form.validate();
+      if(!this.valid) return;
+      else this.$store.dispatch('editProfile', this.profile)
       .finally(() => {
         this.toEditProfile = false;
         this.resetProfile();
