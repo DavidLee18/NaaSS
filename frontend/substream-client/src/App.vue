@@ -68,6 +68,16 @@
                             required/>
                         </v-col>
                         <v-col cols="12" sm="6" md="4">
+                          <v-file-input
+                            v-model="profile.image"
+                            @change="console.log"
+                            prepend-icon="mdi-camera"
+                            outlined
+                            label="프로필 사진"
+                            show-size
+                            counter/>
+                        </v-col>
+                        <v-col cols="12" sm="6" md="4">
                           <v-text-field v-model="profile.name" outlined label="이름"/>
                         </v-col>
                         <v-col cols="12" sm="6" md="4">
@@ -208,6 +218,7 @@ export default {
     resetProfile() {
       this.profile = {
         alias: '',
+        image: {},
         name: '',
         department: '',
         tel: ''
@@ -232,6 +243,7 @@ export default {
   mounted() {
     this.$store.dispatch('getMyProfile').then(() => {
       this.profile.alias = this.$store.getters.alias;
+      //image init required
       this.profile.name = this.$store.getters.name;
       this.profile.department = this.$store.getters.department;
       this.profile.tel = this.$store.getters.tel;
