@@ -113,7 +113,7 @@
         </v-stepper-items>
       </v-stepper>
     </v-card>
-    <v-dialog v-model="error">
+    <v-dialog v-model="error" persistent>
       <v-card>
         <v-card-text>
           이미 등록된 E-mail 을 사용할 수 없습니다. <br>
@@ -191,8 +191,9 @@ export default {
         this.$store.dispatch('createUserAndLogin', {
           email: this.email,
           password: this.password
-        }).catch(r => {
-          if(r.status === 400 && r.data.detail === 'Email already registered') {
+        }).catch(e => {
+          console.log(e);
+          if(e.response && e.response.status === 400 && e.response.data.detail === 'Email already registered') {
             this.error = true;
           }
         })

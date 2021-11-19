@@ -48,7 +48,7 @@ export default {
               await dispatch('getMyInfo');
               await dispatch('getMyProfile');
           }
-        } else if(res && res.status === 400) throw res;
+        }
       },
       async getMyInfo({ commit, dispatch }) {
         try {
