@@ -1,117 +1,130 @@
 <template>
-  <v-card elevation="5" class="mx-auto" max-width="700">
-    <v-card-title>환영합니다! 기본 정보를 입력하고 구독하세요</v-card-title>
-    <v-stepper v-model="progress">
-      <v-stepper-header>
-        <v-stepper-step :complete="progress > 1" step="1">E-mail 입력</v-stepper-step>
+  <section>
+    <v-card elevation="5" class="mx-auto" max-width="700">
+      <v-card-title>환영합니다! 기본 정보를 입력하고 구독하세요</v-card-title>
+      <v-stepper v-model="progress">
+        <v-stepper-header>
+          <v-stepper-step :complete="progress > 1" step="1">E-mail 입력</v-stepper-step>
 
-        <v-divider/>
+          <v-divider/>
 
-        <v-stepper-step :complete="progress > 2" step="2">사용자 이름 입력</v-stepper-step>
+          <v-stepper-step :complete="progress > 2" step="2">사용자 이름 입력</v-stepper-step>
 
-        <v-divider/>
+          <v-divider/>
 
-        <v-stepper-step :complete="progress > 3" step="3">비밀번호 입력</v-stepper-step>
+          <v-stepper-step :complete="progress > 3" step="3">비밀번호 입력</v-stepper-step>
 
-        <v-divider/>
+          <v-divider/>
 
-        <v-stepper-step :complete="progress > 4" step="4">비밀번호 확인</v-stepper-step>
+          <v-stepper-step :complete="progress > 4" step="4">비밀번호 확인</v-stepper-step>
 
-        <v-divider/>
+          <v-divider/>
 
-        <v-stepper-step step="5">완료</v-stepper-step>
-      </v-stepper-header>
+          <v-stepper-step step="5">완료</v-stepper-step>
+        </v-stepper-header>
 
-      <v-stepper-items>
-        <v-stepper-content step="1">
-          <v-card class="mb-12" elevation="0" max-width="400" height="50">
-            <v-form v-model="valid.email" ref="email">
-              <v-text-field 
-                v-model="email" 
-                :rules="rules.email" 
-                type="email" 
-                label="E-mail *" 
-                required 
-                outlined
-                @keyup.enter="validateAndProceed('email', 2)"></v-text-field>
-            </v-form>
-          </v-card>
-          <v-btn color="primary" @click="validateAndProceed('email', 2)"> 다음 </v-btn>
-          <v-btn text @click="$router.go(-1)"> 취소 </v-btn>
-        </v-stepper-content>
+        <v-stepper-items>
+          <v-stepper-content step="1">
+            <v-card class="mb-12" elevation="0" max-width="400" height="50">
+              <v-form v-model="valid.email" ref="email" @submit="$event.preventDefault()">
+                <v-text-field 
+                  v-model="email" 
+                  :rules="rules.email" 
+                  type="email" 
+                  label="E-mail *" 
+                  required 
+                  outlined
+                  @keyup.enter="validateAndProceed('email', 2)"></v-text-field>
+              </v-form>
+            </v-card>
+            <v-btn color="primary" @click="validateAndProceed('email', 2)"> 다음 </v-btn>
+            <v-btn text @click="$router.go(-1)"> 취소 </v-btn>
+          </v-stepper-content>
 
-        <v-stepper-content step="2">
-          <v-card class="mb-12" elevation="0" max-width="400" height="50">
-            <v-form v-model="valid.username" ref="username">
-              <v-text-field 
-                v-model="username" 
-                :rules="rules.username"
-                label="사용자 이름(nickname) *" 
-                required 
-                outlined
-                @keyup.enter="validateAndProceed('username', 3)"></v-text-field>
-            </v-form>
-          </v-card>
-          <v-btn color="primary" @click="validateAndProceed('username', 3)"> 다음 </v-btn>
-          <v-btn text @click="progress = 1"> 뒤로 가기 </v-btn>
-        </v-stepper-content>
+          <v-stepper-content step="2">
+            <v-card class="mb-12" elevation="0" max-width="400" height="50">
+              <v-form v-model="valid.username" ref="username" @submit="$event.preventDefault()">
+                <v-text-field 
+                  v-model="username" 
+                  :rules="rules.username"
+                  label="사용자 이름(nickname) *" 
+                  required 
+                  outlined
+                  @keyup.enter="validateAndProceed('username', 3)"></v-text-field>
+              </v-form>
+            </v-card>
+            <v-btn color="primary" @click="validateAndProceed('username', 3)"> 다음 </v-btn>
+            <v-btn text @click="progress = 1"> 뒤로 가기 </v-btn>
+          </v-stepper-content>
 
-        <v-stepper-content step="3">
-          <v-card class="mb-12" elevation="0" max-width="400" height="50">
-            <v-form v-model="valid.password" ref="password">
-              <v-text-field 
-                v-model="password" 
-                :rules="rules.password" 
-                :append-icon="passwordVisible ? 'mdi-eye' : 'mdi-eye-off'" 
-                :type="passwordVisible ? 'text' : 'password'" 
-                label="비밀번호 *" 
-                required
-                minlength="6"
-                outlined
-                @click:append="passwordVisible = !passwordVisible"
-                @keyup.enter="validateAndProceed('password', 4)"></v-text-field>
-            </v-form>
-          </v-card>
-          <v-btn color="primary" @click="validateAndProceed('password', 4)"> 다음 </v-btn>
-          <v-btn text @click="progress = 2"> 뒤로 가기 </v-btn>
-        </v-stepper-content>
+          <v-stepper-content step="3">
+            <v-card class="mb-12" elevation="0" max-width="400" height="50">
+              <v-form v-model="valid.password" ref="password" @submit="$event.preventDefault()">
+                <v-text-field 
+                  v-model="password" 
+                  :rules="rules.password" 
+                  :append-icon="passwordVisible ? 'mdi-eye' : 'mdi-eye-off'" 
+                  :type="passwordVisible ? 'text' : 'password'" 
+                  label="비밀번호 *" 
+                  required
+                  minlength="6"
+                  outlined
+                  @click:append="passwordVisible = !passwordVisible"
+                  @keyup.enter="validateAndProceed('password', 4)"></v-text-field>
+              </v-form>
+            </v-card>
+            <v-btn color="primary" @click="validateAndProceed('password', 4)"> 다음 </v-btn>
+            <v-btn text @click="progress = 2"> 뒤로 가기 </v-btn>
+          </v-stepper-content>
 
-        <v-stepper-content step="4">
-          <v-card class="mb-12" elevation="0" max-width="400" height="50">
-            <v-form v-model="valid.passwordAgain" ref="passwordAgain">
-              <v-text-field 
-                v-model="passwordAgain" 
-                :rules="rules.passwordAgain" 
-                :append-icon="passwordAgainVisible ? 'mdi-eye' : 'mdi-eye-off'" 
-                :type="passwordAgainVisible ? 'text' : 'password'" 
-                label="비밀번호 확인 *" 
-                required
-                outlined
-                @click:append="passwordAgainVisible = !passwordAgainVisible"
-                @keyup.enter="validateAndSignUp"></v-text-field>
-            </v-form>
-          </v-card>
-          <v-btn 
-            color="primary"
-            :disabled="trying || !allValid"
-            :loading="trying"
-            @click="validateAndSignUp"> 가입 및 구독하기 </v-btn>
-          <v-btn text @click="progress = 3"> 뒤로 가기 </v-btn>
-        </v-stepper-content>
+          <v-stepper-content step="4">
+            <v-card class="mb-12" elevation="0" max-width="400" height="50">
+              <v-form v-model="valid.passwordAgain" ref="passwordAgain" @submit="$event.preventDefault()">
+                <v-text-field 
+                  v-model="passwordAgain" 
+                  :rules="rules.passwordAgain" 
+                  :append-icon="passwordAgainVisible ? 'mdi-eye' : 'mdi-eye-off'" 
+                  :type="passwordAgainVisible ? 'text' : 'password'" 
+                  label="비밀번호 확인 *" 
+                  required
+                  outlined
+                  @click:append="passwordAgainVisible = !passwordAgainVisible"
+                  @keyup.enter="validateAndSignUp"></v-text-field>
+              </v-form>
+            </v-card>
+            <v-btn 
+              color="primary"
+              :disabled="trying || !allValid"
+              :loading="trying"
+              @click="validateAndSignUp"> 가입 및 구독하기 </v-btn>
+            <v-btn text @click="progress = 3"> 뒤로 가기 </v-btn>
+          </v-stepper-content>
 
-        <v-stepper-content step="5">
-          <v-card class="mb-12" elevation="0" height="200px">
-              <h2>
-                  환영합니다! <br> 
-                  회원가입과 구독이 완료되었습니다. <br>
-                  대시보드로 NaaSS를 둘러보세요
-              </h2>
-          </v-card>
-          <v-btn color="primary" @click="$router.push('dashboard')"> 계속하기 </v-btn>
-        </v-stepper-content>
-      </v-stepper-items>
-    </v-stepper>
-  </v-card>
+          <v-stepper-content step="5">
+            <v-card class="mb-12" elevation="0" height="200px">
+                <h2>
+                    환영합니다! <br> 
+                    회원가입과 구독이 완료되었습니다. <br>
+                    대시보드로 NaaSS를 둘러보세요
+                </h2>
+            </v-card>
+            <v-btn color="primary" @click="$router.push('dashboard')"> 계속하기 </v-btn>
+          </v-stepper-content>
+        </v-stepper-items>
+      </v-stepper>
+    </v-card>
+    <v-dialog v-model="error">
+      <v-card>
+        <v-card-text>
+          이미 등록된 E-mail 을 사용할 수 없습니다. <br>
+          다른 E-mail로 다시 시도해 주세요.
+        </v-card-text>
+        <v-card-actions>
+          <v-btn @click="error = false; reset()">확인</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </section>
 </template>
 
 <script>
@@ -131,6 +144,7 @@ export default {
       passwordAgain: false,
       username: false,
     },
+    error: false
   }),
   computed: {
     allValid() {
@@ -159,6 +173,11 @@ export default {
     }
   },
   methods: {
+    reset() {
+      for(const form in this.$refs) form.reset();
+      
+      this.progress = 1;
+    },
     validateAndProceed(name, nextValue) {
       this.valid[name] = this.$refs[name].validate();
       if(this.valid[name]) this.progress = nextValue;
@@ -172,7 +191,12 @@ export default {
         this.$store.dispatch('createUserAndLogin', {
           email: this.email,
           password: this.password
-        }).then(() => {
+        }).catch(r => {
+          if(r.status === 400 && r.data.detail === 'Email already registered') {
+            this.error = true;
+          }
+        })
+        .then(() => {
           this.$store.dispatch('createProfile', { alias: this.username });
         });
         this.trying = false;

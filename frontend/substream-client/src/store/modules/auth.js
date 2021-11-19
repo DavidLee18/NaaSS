@@ -38,23 +38,17 @@ export default {
         }
       },
       async createUserAndLogin({ commit, dispatch }, { email, password }) {
-        try {
-          const res = await nimrod.createUser(email, password);
-          if(res && res.status === 201) {
-            const user = res.data;
-            commit('getMyInfo', user);
-            const res2 = await nimrod.login(email, password);
-            if(res2 && res2.status === 200) {
-                commit('login');
-                await dispatch('getMyInfo');
-                await dispatch('getMyProfile');
-            }
+        const res = await nimrod.createUser(email, password);
+        if(res && res.status === 201) {
+          const user = res.data;
+          commit('getMyInfo', user);
+          const res2 = await nimrod.login(email, password);
+          if(res2 && res2.status === 200) {
+              commit('login');
+              await dispatch('getMyInfo');
+              await dispatch('getMyProfile');
           }
-        } catch (error) {
-          console.error(error);
-          commit('logout');
-          await dispatch('setError', error.message);
-        }
+        } else if(res && res.status === 400) throw res;
       },
       async getMyInfo({ commit, dispatch }) {
         try {
