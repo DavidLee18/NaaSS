@@ -70,7 +70,7 @@
                         <v-col cols="12" sm="6" md="4">
                           <v-file-input
                             v-model="profile.image"
-                            @change="console.log"
+                            @change="print"
                             prepend-icon="mdi-camera"
                             outlined
                             label="프로필 사진"
@@ -215,6 +215,7 @@ export default {
   },
   methods: {
     logout() { this.$store.dispatch('logout'); },
+    print(files) { console.log(files); },
     resetProfile() {
       this.profile = {
         alias: '',
