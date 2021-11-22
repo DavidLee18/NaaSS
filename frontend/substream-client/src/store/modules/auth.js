@@ -31,8 +31,12 @@ export default {
         }
       },
       async logout({ commit }) {
-        const loggedOut = await nimrod.logout();
-        if(loggedOut) {
+        try{
+          const loggedOut = await nimrod.logout();
+          console.log(`logout ${loggedOut ? 'succeeded' : 'failed'}`);
+        }
+        catch(e) { console.error(e) }
+        finally {
           commit('logout');
           router.push('login');
         }
