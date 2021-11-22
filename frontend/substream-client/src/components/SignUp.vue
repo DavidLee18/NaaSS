@@ -212,3 +212,6 @@ export default {
   },
 };
 </script>
+<style scoped>
+v-text-field { margin: 5px; }
+</style>
