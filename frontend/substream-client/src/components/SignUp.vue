@@ -120,7 +120,7 @@
           다른 E-mail로 다시 시도해 주세요.
         </v-card-text>
         <v-card-actions>
-          <v-btn @click="error = false; reset()">확인</v-btn>
+          <v-btn @click="reset">확인</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -177,6 +177,7 @@ export default {
       for(const form in this.$refs) form.reset();
       
       this.progress = 1;
+      this.error = false;
     },
     validateAndProceed(name, nextValue) {
       this.valid[name] = this.$refs[name].validate();
