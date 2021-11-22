@@ -178,7 +178,7 @@ export default {
   },
   methods: {
     resetForms() {
-      for(const form in this.$refs) form.reset();
+      this.email = ''; this.username = ''; this.password = ''; this.passwordAgain = '';
       
       this.progress = 1;
       this.error = false;
