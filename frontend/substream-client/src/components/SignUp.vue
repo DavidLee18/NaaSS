@@ -33,6 +33,7 @@
                   type="email" 
                   label="E-mail *" 
                   required 
+                  autofocus
                   outlined
                   @keyup.enter="validateAndProceed('email', 2)"></v-text-field>
               </v-form>
@@ -49,6 +50,7 @@
                   :rules="rules.username"
                   label="사용자 이름(nickname) *" 
                   required 
+                  autofocus
                   outlined
                   @keyup.enter="validateAndProceed('username', 3)"></v-text-field>
               </v-form>
@@ -68,6 +70,7 @@
                   label="비밀번호 *" 
                   required
                   minlength="6"
+                  autofocus
                   outlined
                   @click:append="passwordVisible = !passwordVisible"
                   @keyup.enter="validateAndProceed('password', 4)"></v-text-field>
@@ -87,6 +90,7 @@
                   :type="passwordAgainVisible ? 'text' : 'password'" 
                   label="비밀번호 확인 *" 
                   required
+                  autofocus
                   outlined
                   @click:append="passwordAgainVisible = !passwordAgainVisible"
                   @keyup.enter="validateAndSignUp"></v-text-field>
@@ -113,7 +117,7 @@
         </v-stepper-items>
       </v-stepper>
     </v-card>
-    <v-dialog v-model="error" persistent>
+    <v-dialog v-model="error" persistent max-width="600">
       <v-card>
         <v-card-text>
           이미 등록된 E-mail 을 사용할 수 없습니다. <br>
