@@ -26,6 +26,13 @@ def create_user(db: Session, user: schemas.UserCreate):
     db.refresh(db_user)
     return db_user
 
+def update_user(db:Session, user: schemas.UserCreate):
+    db.query(models.User).filter(models.User.email == user.email).update({
+        models.User.email: user.email,
+        models.User.hashed_password: user.hashed_password,
+    })
+    db.commit()
+
 def delete_user(db: Session, user_id: int) -> bool:
     user = get_user(db, user_id)
     if user is None:

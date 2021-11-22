@@ -7,9 +7,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from fastapi.staticfiles import StaticFiles
+from fastapi_mail import FastMail, ConnectionConfig, MessageSchema
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from sqlalchemy.orm import Session
+from starlette.responses import JSONResponse
 
 import crud, models, schemas, database
 
@@ -41,6 +43,20 @@ app.add_middleware(
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl='token')
 
 pwd_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
+
+mail_conf = ConnectionConfig(
+    MAIL_USERNAME = 'djwodus',
+    MAIL_PASSWORD = '',
+    MAIL_FROM = 'djwodus@gmail.com',
+    MAIL_PORT = 587,
+    MAIL_SERVER = 'smtp.gmail.com',
+    MAIL_FROM_NAME = 'NaaSS',
+    MAIL_TLS = True,
+    MAIL_SSL = False,
+    USE_CREDENTIALS = True,
+)
+
+mail = FastMail(mail_conf)
 
 # Dependency
 async def get_db():
@@ -93,6 +109,15 @@ def authenticate_user(username: str, password: str, db: Session):
         return False
     return user
 
+def get_email_html(access_token: str):
+    return f"""<p>
+    이 메일은 본 메일주소로 등록된 NaaSS 계정의 비밀번호 재설정을 위해 발송되었습니다 <br>
+    비밀번호를 재설정 하시려면 
+    <a href="https://naass.nginxplus.co.kr/forgot-password?token={access_token}">이 링크</a>를
+    통해서 재설정하세요 <br>
+    NaaSS - NGINX as a subscription service
+    </p>"""
+
 
 
 #test
@@ -117,6 +142,42 @@ async def login_for_access_token(res: Response, form_data: OAuth2PasswordRequest
 async def logout(res: Response, current_user: schemas.UserCreate = Depends(get_current_user)):
     res.delete_cookie('access')
     return res
+
+@app.post('/api/forgot-password', status_code=status.HTTP_202_ACCEPTED)
+async def send_password_reset_email(email: str, db: Session = Depends(get_db)):
+    user = crud.get_user_by_email(db, email)
+    if user is not None:
+        access_token = create_access_token({ 'sub': email }, ACCESS_TOKEN_EXPIRE_TIME)
+        message = MessageSchema(
+            subject = 'NaaSS: 비밀번호 재설정',
+            recipients = [email],
+            body = get_email_html(access_token),
+            subtype = 'html'
+        )
+        await mail.send_message(message)
+
+@app.post('/api/reset-password')
+async def reset_password(token: str, password: str, db: Session = Depends(get_db)):
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_400_BAD_REQUEST,
+        detail='bad or expired token',
+    )
+    try:
+        if token is None:
+            raise credentials_exception
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        username: Optional[str] = payload.get('sub')
+        if username is None:
+            raise credentials_exception
+        else:
+            user = crud.get_user_by_email(db, email=username)
+            if user is None:
+                raise credentials_exception
+            else:
+                crud.update_user(db, schemas.UserCreate(email=user.email, hashed_password=get_password_hash(password)))
+                return JSONResponse({ 'detail': 'password successfully reset' })
+    except JWTError:
+        raise credentials_exception
 
 #real apis
 @app.post("/api/users", status_code=status.HTTP_201_CREATED)
