@@ -146,28 +146,28 @@ async def logout(current_user: schemas.UserCreate = Depends(get_current_user)):
     return res
 
 @app.post('/api/forgot-password', status_code=status.HTTP_202_ACCEPTED)
-async def send_password_reset_email(email: str, db: Session = Depends(get_db)):
-    user = crud.get_user_by_email(db, email)
+async def send_password_reset_email(email: schemas.ForgotPasswordPacket, db: Session = Depends(get_db)):
+    user = crud.get_user_by_email(db, email.email)
     if user is not None:
-        access_token = create_access_token({ 'sub': email }, ACCESS_TOKEN_EXPIRE_TIME)
+        access_token = create_access_token({ 'sub': email.email }, ACCESS_TOKEN_EXPIRE_TIME)
         message = MessageSchema(
             subject = 'NaaSS: 비밀번호 재설정',
-            recipients = [email],
+            recipients = [email.email],
             body = get_email_html(access_token),
             subtype = 'html'
         )
         await mail.send_message(message)
 
 @app.post('/api/reset-password')
-async def reset_password(token: str, password: str, db: Session = Depends(get_db)):
+async def reset_password(token_and_password: schemas.ResetPasswordPacket, db: Session = Depends(get_db)):
     credentials_exception = HTTPException(
         status_code=status.HTTP_400_BAD_REQUEST,
         detail='bad or expired token',
     )
     try:
-        if token is None:
+        if token_and_password.token is None:
             raise credentials_exception
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        payload = jwt.decode(token_and_password.token, SECRET_KEY, algorithms=[ALGORITHM])
         username: Optional[str] = payload.get('sub')
         if username is None:
             raise credentials_exception
@@ -176,7 +176,7 @@ async def reset_password(token: str, password: str, db: Session = Depends(get_db
             if user is None:
                 raise credentials_exception
             else:
-                crud.update_user(db, schemas.UserCreate(email=user.email, hashed_password=get_password_hash(password)))
+                crud.update_user(db, schemas.UserCreate(email=user.email, hashed_password=get_password_hash(token_and_password.password)))
                 return JSONResponse({ 'detail': 'password successfully reset' })
     except JWTError:
         raise credentials_exception

@@ -47,3 +47,11 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     username: Optional[str] = None
+
+
+class ForgotPasswordPacket(BaseModel):
+    email: str
+
+class ResetPasswordPacket(BaseModel):
+    token: str
+    password: str
