@@ -123,9 +123,7 @@
         <v-list-item link to="nginx-trip">
           <v-list-item-icon>
             <v-icon>
-              <span class="material-icons-outlined">
-                subscriptions
-              </span>
+              subscriptions
             </v-icon>
           </v-list-item-icon>
           <v-list-item-title>NGINX 디지털 체험관</v-list-item-title>
