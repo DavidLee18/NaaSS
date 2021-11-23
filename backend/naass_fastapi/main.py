@@ -45,14 +45,14 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl='token')
 pwd_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
 
 mail_conf = ConnectionConfig(
-    MAIL_USERNAME = 'djwodus',
+    MAIL_USERNAME = 'djwodus18',
     MAIL_PASSWORD = '',
-    MAIL_FROM = 'djwodus@gmail.com',
-    MAIL_PORT = 587,
-    MAIL_SERVER = 'smtp.gmail.com',
+    MAIL_FROM = 'djwodus18@naver.com',
+    MAIL_PORT = 465,
+    MAIL_SERVER = 'smtp.naver.com',
     MAIL_FROM_NAME = 'NaaSS',
     MAIL_TLS = True,
-    MAIL_SSL = False,
+    MAIL_SSL = True,
     USE_CREDENTIALS = True,
 )
 

@@ -53,10 +53,12 @@
             <v-form v-model="emailValid" ref="forgotPasswordForm">
               <v-text-field
                 required
+                autofocus
                 outlined
                 v-model="toSendEmail"
                 label="E-mail *"
                 type="email"
+                @keyup.enter.prevent="sendResetEmail"
                 :rules="rules.email"/>
             </v-form>
           </v-card-text>
