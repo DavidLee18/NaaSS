@@ -50,7 +50,7 @@
           </v-card-title>
           <v-card-text>
             <p>NaaSS에 가입하신 E-mail을 입력하시면 비밀번호 재설정 메일을 보내드리겠습니다.</p>
-            <v-form v-model="emailValid" ref="forgotPasswordForm" @submit="sendResetEmail">
+            <v-form v-model="emailValid" ref="forgotPasswordForm">
               <v-text-field
                 required
                 outlined
