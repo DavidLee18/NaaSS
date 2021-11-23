@@ -126,7 +126,7 @@ async def read_items(current_user: schemas.UserCreate = Depends(get_current_user
     return current_user
 
 @app.post('/api/token')
-async def login_for_access_token(res: Response, form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     user = authenticate_user(form_data.username, form_data.password, db)
     if not user:
         raise HTTPException(
@@ -135,11 +135,13 @@ async def login_for_access_token(res: Response, form_data: OAuth2PasswordRequest
             headers={ 'WWW-Authenticate': 'Bearer' }
         )
     access_token = create_access_token({ 'sub': user.email }, ACCESS_TOKEN_EXPIRE_TIME)
+    res = Response()
     res.set_cookie("access", access_token, expires=ACCESS_TOKEN_EXPIRE_TIME.seconds, secure=True, httponly=True)
     return res
 
 @app.delete('/api/token')
-async def logout(res: Response, current_user: schemas.UserCreate = Depends(get_current_user)):
+async def logout(current_user: schemas.UserCreate = Depends(get_current_user)):
+    res = Response()
     res.delete_cookie('access')
     return res
 
