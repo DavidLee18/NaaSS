@@ -1,6 +1,8 @@
 import router from './router';
 import store from './store';
 
+export const isOk = status => status >= 200 && status < 300;
+
 export const logInSafely = (user) => {
   store.commit('login', user);
   router.push('dashboard');

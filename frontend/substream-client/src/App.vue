@@ -118,19 +118,32 @@
           <v-list-item-icon>
             <v-icon>dashboard</v-icon>
           </v-list-item-icon>
-          <v-list-item-title>대시보드</v-list-item-title>
+          <v-list-item-title>NaaSS 소개</v-list-item-title>
         </v-list-item>
         <v-list-item link to="nginx-trip">
           <v-list-item-icon>
-            <v-icon>accessibility_new</v-icon>
+            <v-icon>
+              <span class="material-icons-outlined">
+                subscriptions
+              </span>
+            </v-icon>
           </v-list-item-icon>
-          <v-list-item-title>NGINX 체험관</v-list-item-title>
+          <v-list-item-title>NGINX 디지털 체험관</v-list-item-title>
         </v-list-item>
-        <v-btn icon @click.stop="mini = !mini" class="mini-switcher">
-          <v-icon>
-            {{ mini ? "mdi-chevron-right" : "mdi-chevron-left" }}
-          </v-icon>
-        </v-btn>
+        <v-list-item link to="">
+          <v-list-item-icon>
+            <v-icon>subscriptions</v-icon>
+          </v-list-item-icon>
+          <v-list-item-title>NGINX CVE</v-list-item-title>
+        </v-list-item>
+        <v-list-item @click.stop="mini = !mini" class="mini-switcher">
+          <v-list-item-icon>
+            <v-icon>
+              {{ mini ? "arrow_circle_right" : "arrow_circle_left" }}
+            </v-icon>
+          </v-list-item-icon>
+          <v-list-item-title>메뉴 접기</v-list-item-title>
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
 
