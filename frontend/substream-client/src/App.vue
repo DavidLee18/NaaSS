@@ -128,12 +128,6 @@
           </v-list-item-icon>
           <v-list-item-title>NGINX 디지털 체험관</v-list-item-title>
         </v-list-item>
-        <v-list-item link to="">
-          <v-list-item-icon>
-            <v-icon>subscriptions</v-icon>
-          </v-list-item-icon>
-          <v-list-item-title>NGINX CVE</v-list-item-title>
-        </v-list-item>
         <v-list-item @click.stop="mini = !mini" class="mini-switcher">
           <v-list-item-icon>
             <v-icon>
