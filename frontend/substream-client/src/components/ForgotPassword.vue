@@ -65,17 +65,21 @@ export default {
         passwordReset: false,
         valid: false,
         trying: false,
-        rules: {
-            password: [
-                v => !!v || '새로운 비밀번호를 입력해 주세요',
-                v => v.length >= 6 || '비밀번호는 6자 이상이어야 합니다'
-            ],
-            passwordAgain: [
-                v => !!v || '비밀번호를 다시 입력해 주세요',
-                v => v === this.password || '비밀번호가 일치하지 않습니다'
-            ],
-        }
     }),
+    computed: {
+        rules() {
+            return {
+                password: [
+                    v => !!v || '새로운 비밀번호를 입력해 주세요',
+                    v => v.length >= 6 || '비밀번호는 6자 이상이어야 합니다'
+                ],
+                passwordAgain: [
+                    v => !!v || '비밀번호를 다시 입력해 주세요',
+                    v => v === this.password || '비밀번호가 일치하지 않습니다'
+                ],
+            };
+        }
+    },
     methods: {
         resetPassword() {
             this.valid = this.$refs.form.validate();
@@ -84,7 +88,7 @@ export default {
                 this.trying = true;
                 const token = this.$route.query.token;
                 nimrod.resetPassword(token, this.password).then(reset => {
-                    this.passwordReset = true;
+                    this.passwordReset = reset;
                 }).finally(() => { this.trying = false });
             }
         }
