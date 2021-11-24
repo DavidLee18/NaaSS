@@ -25,7 +25,7 @@ export default {
                 else commit('preferWhite');
             } catch (error) {
                 console.error(error);
-                await dispatch('setError', error.message);
+                // await dispatch('setError', error.message);
             }
         },
         async preferDark({ commit, dispatch }) {
@@ -34,7 +34,7 @@ export default {
                 commit('preferDark');
             } catch (error) {
                 console.error(error);
-                await dispatch('setError', error.message);
+                // await dispatch('setError', error.message);
             }
         },
         async preferWhite({ commit, dispatch }) {
@@ -43,7 +43,7 @@ export default {
                 commit('preferWhite');
             } catch (error) {
                 console.error(error);
-                await dispatch('setError', error.message);
+                // await dispatch('setError', error.message);
             }
         },
     },

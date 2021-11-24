@@ -27,7 +27,7 @@ export default {
         } catch (error) {
           console.error(error);
           commit('logout');
-          await dispatch('setError', error.message);
+          // await dispatch('setError', error.message);
         }
       },
       async logout({ commit }) {
@@ -63,7 +63,7 @@ export default {
           }
         } catch (error) {
           console.error(error);
-          await dispatch('setError', error.message);
+          // await dispatch('setError', error.message);
         }
       },
       async getMyProfile({ commit, dispatch, getters }) {
@@ -78,7 +78,7 @@ export default {
           }
         } catch (error) {
           console.error(error);
-          await dispatch('setError', error.message);
+          // await dispatch('setError', error.message);
         }
       },
       async createProfile({ commit, dispatch, getters }, profile) {
@@ -90,7 +90,7 @@ export default {
           }
         } catch (error) {
           console.error(error);
-          await dispatch('setError', error.message);
+          // await dispatch('setError', error.message);
         }
       },
       async editProfile({ state, dispatch, getters }, profile) {
@@ -99,7 +99,7 @@ export default {
           if (edited) await dispatch('getMyProfile');
         } catch (error) {
           console.error(error);
-          await dispatch('setError', error.message);
+          // await dispatch('setError', error.message);
         }
       }
     },

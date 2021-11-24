@@ -14,6 +14,7 @@ export const logoutSafely = () => {
 };
 
 export const handleError = (error) => {
+  if(!error) return;
   store.dispatch('unsetError');
   if (error.response) {
       // The request was made and the server responded with a status code
