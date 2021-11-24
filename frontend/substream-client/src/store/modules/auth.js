@@ -54,7 +54,7 @@ export default {
           }
         }
       },
-      async getMyInfo({ commit, dispatch }) {
+      async getMyInfo({ commit }) {
         try {
           const res = await nimrod.getMyInfo();
           if (res && res.status === 200) {
@@ -81,7 +81,7 @@ export default {
           // await dispatch('setError', error.message);
         }
       },
-      async createProfile({ commit, dispatch, getters }, profile) {
+      async createProfile({ commit, getters }, profile) {
         try {
           const res = await nimrod.createProfile(getters.userId, profile);
           if (res && res.status === 201) {
