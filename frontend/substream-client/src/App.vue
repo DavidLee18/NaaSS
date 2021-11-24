@@ -265,7 +265,8 @@ export default {
         setTimeout(() => { this.loadIFrame = false; }, 3000);
       }
       else this.loadIFrame = false;
-    }
+    },
+    profile(val) { console.log(val); }
   }
 };
 </script>
