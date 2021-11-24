@@ -1,11 +1,17 @@
 import axios from "axios";
 import QueryString from "qs";
 import { handleError, isOk } from './functions';
+import store from "./store";
 
 axios.defaults.baseURL = 'https://naass.nginxplus.co.kr/api';
 axios.defaults.withCredentials = true;
 axios.defaults.headers['Access-Control-Allow-Origin'] = '*';
 axios.defaults.headers['Access-Control-Allow-Headers'] = '*';
+
+axios.interceptors.response.use(res => {
+    store.dispatch('unsetError');
+    return res;
+}, error => Promise.reject(handleError(error)));
 
 const formsHeader = { headers: { 'Content-Type': 'application/x-www-form-urlencoded', ...axios.defaults.headers }, ...axios.defaults };
 

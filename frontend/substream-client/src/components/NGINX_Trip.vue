@@ -48,7 +48,7 @@
       </v-alert> -->
       <iframe id="portal" :sandbox="sandboxStatement"
       :src="selectedTrip.source" frameBorder="0"
-      @error="handleIFrameError($event)" :style="heightStyle"></iframe>
+      @error="handleIFrameError($event)"></iframe>
       <!-- <v-dialog
         v-if="false"
         persistent
@@ -118,10 +118,6 @@ export default {
     ],
   }),
   computed: {
-    heightStyle() {
-      const height = this.tripError ? 85 : 95;
-      return { height: `${height}vh` };
-    },
     loggedIn() { return this.$store.getters.loggedIn },
     onTheTrip() {
       return this.$route.query.type > 0;
@@ -172,7 +168,7 @@ export default {
 }
 iframe {
   width: 100%;
-  /* height: 85vh; */
+  height: 95vh;
 }
 section { display: flexbox; }
 </style>
