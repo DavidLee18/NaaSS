@@ -177,13 +177,13 @@
 
     <v-main>
       <v-container fluid pa-0>
-        <!-- <v-alert 
-          v-if="$store.getters.errorMessage && false" 
+        <v-alert 
+          v-if="$store.getters.errorMessage" 
           outlined 
           type="error">
-            오류가 발생했습니다: {{$store.getters.errorMessage}}
-        </v-alert> -->
-        <!-- <div v-if="$store.getters.errorHtml" :v-html="$store.getters.errorHtml"></div> -->
+            {{$store.getters.errorMessage}}
+        </v-alert>
+        <div v-if="$store.getters.errorHtml" :v-html="$store.getters.errorHtml"></div>
         <router-view />
       </v-container>
     </v-main>
