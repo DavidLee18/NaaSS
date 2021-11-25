@@ -207,7 +207,7 @@ export default {
     },
     rules: {
       alias: [ v => !!v || '별칭을 입력해 주세요' ],
-      file: [ vs => !vs || vs.every(v => v.size < 2 * mega) || '파일 사이즈는 2MB 이하여야 합니다.' ],
+      file: [ v => !v || v.size < 2 * mega || '파일 사이즈는 2MB 이하여야 합니다.' ],
     },
     toEditProfile: false,
     valid: false
