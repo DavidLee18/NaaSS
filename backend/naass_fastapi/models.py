@@ -31,12 +31,12 @@ class Profile(database.Base):
     owner = relationship("User", back_populates="profiles")
 
 
-class ProfileImage(database.Base):
-    __tablename__ = 'profile_images'
+# class ProfileImage(database.Base):
+#     __tablename__ = 'profile_images'
 
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String(20), index=True)
-    last_modified = Column(BigInteger)
-    size = Column(BigInteger)
-    type = Column(String(10))
-    owner_id = Column(Integer, ForeignKey('users.id'))
+#     id = Column(Integer, primary_key=True, index=True)
+#     name = Column(String(20), index=True)
+#     last_modified = Column(BigInteger)
+#     size = Column(BigInteger)
+#     type = Column(String(10))
+#     owner_id = Column(Integer, ForeignKey('users.id'))

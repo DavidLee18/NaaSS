@@ -57,15 +57,15 @@ class ResetPasswordPacket(BaseModel):
     password: str
 
 
-class ProfileImageCreate(BaseModel):
-    name: str
-    last_modified: date
-    size: int
-    type: str
+# class ProfileImageCreate(BaseModel):
+#     name: str
+#     last_modified: date
+#     size: int
+#     type: str
 
-class ProfileImage(ProfileImageCreate):
-    id: int
-    owner_id: int
+# class ProfileImage(ProfileImageCreate):
+#     id: int
+#     owner_id: int
 
-    class Config:
-        orm_mode = True
+#     class Config:
+#         orm_mode = True
