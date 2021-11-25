@@ -51,7 +51,7 @@ mail_conf = ConnectionConfig(
     MAIL_PORT = 465,
     MAIL_SERVER = 'smtp.naver.com',
     MAIL_FROM_NAME = 'NaaSS',
-    MAIL_TLS = True,
+    MAIL_TLS = False, # naver mail needs SSL, not TLS
     MAIL_SSL = True,
     USE_CREDENTIALS = True,
 )
