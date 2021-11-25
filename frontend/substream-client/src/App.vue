@@ -43,7 +43,7 @@
 
         <v-list-item v-if="!mini">
           <v-list-item-content>
-            <v-dialog v-model="toEditProfile" persistent width="500">
+            <v-dialog v-model="toEditProfile" persistent max-width="600">
               <template v-slot:activator="{ on, attrs }">
                 <v-list-item-title v-bind="attrs" v-on="on">
                   프로필 수정
@@ -62,16 +62,18 @@
                         <v-col cols="12" sm="6" md="4">
                           <v-text-field 
                             v-model="profile.alias"
-                            :rules="rule"
+                            :rules="rules.alias"
                             label="별칭 *"
                             outlined
                             required/>
                         </v-col>
-                        <v-col cols="12" sm="6" md="4">
+                        <v-col cols="12">
                           <v-file-input
                             v-model="profile.image"
+                            :rules="rules.file"
                             @change="print"
                             prepend-icon="mdi-camera"
+                            accept="image/*"
                             outlined
                             label="프로필 사진"
                             show-size
@@ -191,6 +193,7 @@
 </template>
 
 <script>
+import { mega } from './functions';
 
 export default {
   data: () => ({
@@ -202,7 +205,10 @@ export default {
       department: '',
       tel: '',
     },
-    rule: [ v => !!v || '별칭을 입력해 주세요' ],
+    rules: {
+      alias: [ v => !!v || '별칭을 입력해 주세요' ],
+      file: [ vs => vs.every(v => v.size < 2 * mega) || '파일 사이즈가 2MB 이상입니다. 작은 파일을 골라 주세요' ],
+    },
     toEditProfile: false,
     valid: false
   }),

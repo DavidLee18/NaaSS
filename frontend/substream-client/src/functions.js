@@ -1,6 +1,10 @@
 import router from './router';
 import store from './store';
 
+export const mega = 1024 * 1024;
+
+export const toDateString = date => date.toISOString().split('T')[0];
+
 export const isOk = status => status >= 200 && status < 300;
 
 export const logInSafely = (user) => {
