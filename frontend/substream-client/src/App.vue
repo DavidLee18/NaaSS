@@ -45,7 +45,7 @@
           <v-list-item-content>
             <v-dialog v-model="toEditProfile" persistent max-width="600">
               <template v-slot:activator="{ on, attrs }">
-                <v-list-item-title v-bind="attrs" v-on="on">
+                <v-list-item-title v-bind="attrs" v-on="on" @click="readProfile">
                   프로필 수정
                 </v-list-item-title>
               </template>
@@ -213,7 +213,6 @@ export default {
     valid: false
   }),
   computed: {
-    dark() { return this.$store.getters.dark },
     loggedIn() { return this.$store.getters.loggedIn },
     onTheTrip() { return this.$route.path === '/nginx-trip' && this.$route.query.type > 0; },
     presenting() {
@@ -227,6 +226,13 @@ export default {
   methods: {
     logout() { this.$store.dispatch('logout'); },
     print(files) { console.log(files); },
+    readProfile() {
+      this.profile.alias = this.$store.getters.alias;
+      //image init required
+      this.profile.name = this.$store.getters.name;
+      this.profile.department = this.$store.getters.department;
+      this.profile.tel = this.$store.getters.tel;
+    },
     resetProfile() {
       this.profile = {
         alias: '',
@@ -245,26 +251,18 @@ export default {
     updateProfile() {
       this.valid = this.$refs.form.validate();
       if(!this.valid) return;
-      else this.$store.dispatch('editProfile', this.profile)
-      .finally(() => {
+      else this.$store.dispatch('editProfile', this.profile).finally(() => {
         this.toEditProfile = false;
         this.resetProfile();
       });
     }
   },
   mounted() {
-    this.$store.dispatch('getMyProfile').then(() => {
-      this.profile.alias = this.$store.getters.alias;
-      //image init required
-      this.profile.name = this.$store.getters.name;
-      this.profile.department = this.$store.getters.department;
-      this.profile.tel = this.$store.getters.tel;
-    });
-    this.$store.dispatch('listenToSystem');
-    this.$store.dispatch('listenToPreference');
+    setInterval(() => this.$store.dispatch('listenToSystem'), 3000);
+    setInterval(() => this.$store.dispatch('listenToPreference'), 3000);
+    setInterval(() => this.$vuetify.theme.dark = this.$store.getters.dark, 3000);
   },
   watch: {
-    dark(val) { console.log(`dark: ${val}`); this.$vuetify.theme.dark = val },
     onTheTrip() {
       if(this.onTheTrip) {
         this.loadIFrame = true;
@@ -272,7 +270,6 @@ export default {
       }
       else this.loadIFrame = false;
     },
-    profile(val) { console.log(val); }
   }
 };
 </script>
