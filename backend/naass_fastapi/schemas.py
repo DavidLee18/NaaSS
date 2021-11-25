@@ -55,3 +55,17 @@ class ForgotPasswordPacket(BaseModel):
 class ResetPasswordPacket(BaseModel):
     token: str
     password: str
+
+
+class ProfileImageCreate(BaseModel):
+    name: str
+    last_modified: date
+    size: int
+    type: str
+
+class ProfileImage(ProfileImageCreate):
+    id: int
+    owner_id: int
+
+    class Config:
+        orm_mode = True
