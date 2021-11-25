@@ -67,7 +67,7 @@
                             outlined
                             required/>
                         </v-col>
-                        <v-col cols="12">
+                        <!-- <v-col cols="12">
                           <v-file-input
                             v-model="profile.image"
                             :rules="rules.file"
@@ -78,7 +78,7 @@
                             label="프로필 사진"
                             show-size
                             />
-                        </v-col>
+                        </v-col> -->
                         <v-col cols="12" sm="6" md="4">
                           <v-text-field v-model="profile.name" outlined label="이름"/>
                         </v-col>
@@ -207,7 +207,7 @@ export default {
     },
     rules: {
       alias: [ v => !!v || '별칭을 입력해 주세요' ],
-      file: [ v => !v || v.size < 2 * mega || '파일 사이즈는 2MB 이하여야 합니다.' ],
+      // file: [ v => !v || v.size < 2 * mega || '파일 사이즈는 2MB 이하여야 합니다.' ],
     },
     toEditProfile: false,
     valid: false
@@ -236,7 +236,7 @@ export default {
     resetProfile() {
       this.profile = {
         alias: '',
-        image: {},
+        // image: {},
         name: '',
         department: '',
         tel: ''

@@ -24,9 +24,10 @@ class Profile(database.Base):
     alias = Column(String(20), index=True)
     department = Column(String(20))
     prefer_dark = Column(Boolean, default=False)
+    subscribing = Column(Boolean, default=True)
     tel = Column(String(20))
     owner_id = Column(Integer, ForeignKey("users.id"))
-    profile_image_id = Column(Integer, ForeignKey('profile_images.id'))
+    # profile_image_id = Column(Integer, ForeignKey('profile_images.id'))
 
     owner = relationship("User", back_populates="profiles")
 

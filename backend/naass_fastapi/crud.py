@@ -67,6 +67,7 @@ def update_profile(db: Session, profile_id: int, profile: schemas.ProfileCreate)
         models.Profile.name: profile.name,
         models.Profile.department: profile.department,
         models.Profile.prefer_dark: profile.prefer_dark,
+        models.Profile.subscribing: profile.subscribing,
         models.Profile.tel: profile.tel
     })
     db.commit()

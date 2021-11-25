@@ -120,7 +120,7 @@ def get_email_html(access_token: str):
 
 
 
-#test
+
 @app.get('/api/users/me')
 async def read_items(current_user: schemas.UserCreate = Depends(get_current_user)):
     return current_user
@@ -181,7 +181,7 @@ async def reset_password(token_and_password: schemas.ResetPasswordPacket, db: Se
     except JWTError:
         raise credentials_exception
 
-#real apis
+
 @app.post("/api/users", status_code=status.HTTP_201_CREATED)
 async def create_user(user_form: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     db_user = crud.get_user_by_email(db, email=user_form.username)
