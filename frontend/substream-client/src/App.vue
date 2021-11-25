@@ -77,7 +77,7 @@
                             outlined
                             label="프로필 사진"
                             show-size
-                            counter/>
+                            />
                         </v-col>
                         <v-col cols="12" sm="6" md="4">
                           <v-text-field v-model="profile.name" outlined label="이름"/>
@@ -207,7 +207,7 @@ export default {
     },
     rules: {
       alias: [ v => !!v || '별칭을 입력해 주세요' ],
-      file: [ vs => vs.every(v => v.size < 2 * mega) || '파일 사이즈가 2MB 이상입니다. 작은 파일을 골라 주세요' ],
+      file: [ vs => !vs || vs.every(v => v.size < 2 * mega) || '파일 사이즈는 2MB 이하여야 합니다.' ],
     },
     toEditProfile: false,
     valid: false
