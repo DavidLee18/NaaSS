@@ -198,14 +198,16 @@
         </v-alert>
         <div v-if="$store.getters.errorHtml" :v-html="$store.getters.errorHtml"></div>
         <router-view />
-        <v-snackbar v-model="subscriptionUpdated">{{ $store.getters.subscribing ? '이제 CVE 서비스를 구독합니다' : 'CVE 서비스 구독을 일시정지합니다' }}</v-snackbar>
+        <v-snackbar v-model="subscriptionUpdated" :color="$vuetify.theme.dark ? 'white' : 'black'">
+          {{ $store.getters.subscribing ? '이제 CVE 서비스를 구독합니다' : 'CVE 서비스 구독을 일시정지합니다' }}
+        </v-snackbar>
       </v-container>
     </v-main>
   </v-app>
 </template>
 
 <script>
-import { subscribe } from './functions';
+import { subscribe, unsubscribe } from './functions';
 // import { mega } from './functions';
 
 export default {
@@ -273,14 +275,12 @@ export default {
     },
     updateSubscription() {
       this.updatingSubscription = true;
-      // setTimeout(() => {
-      //   this.updatingSubscription = false;
-      //   this.mockSubscribing = !this.mockSubscribing;
-      // }, 3000);
-      subscribe().finally(() => {
+      const finishUpdating = () => {
         this.updatingSubscription = false;
         this.subscriptionUpdated = true;
-      });
+      };
+      if(!this.$store.getters.subscribing) subscribe().finally(finishUpdating);
+      else unsubscribe().finally(finishUpdating);
     }
   },
   mounted() {
