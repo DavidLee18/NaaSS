@@ -71,7 +71,6 @@
                           <v-file-input
                             v-model="profile.image"
                             :rules="rules.file"
-                            @change="print"
                             prepend-icon="mdi-camera"
                             accept="image/*"
                             outlined
@@ -158,8 +157,9 @@
       <v-tooltip bottom>
         <template v-slot:activator="{ on, attrs }">
           <v-btn icon v-bind="attrs" v-on="on"
-            @click="mockSubscribing = !mockSubscribing"
-            :color="mockSubscribing ? undefined : 'error'"
+            @click="updateSubscription"
+            :color="mockSubscribing || updatingSubscription ? undefined : 'error'"
+            :loading="updatingSubscription"
           >
             <v-icon> {{ mockSubscribing ? 'mark_email_read' : 'unsubscribe' }} </v-icon>
           </v-btn>
@@ -205,6 +205,7 @@
 </template>
 
 <script>
+// import { subscribe } from './functions';
 // import { mega } from './functions';
 
 export default {
@@ -223,7 +224,8 @@ export default {
       // file: [ v => !v || v.size < 2 * mega || '파일 사이즈는 2MB 이하여야 합니다.' ],
     },
     toEditProfile: false,
-    valid: false
+    valid: false,
+    updatingSubscription: false
   }),
   computed: {
     loggedIn() { return this.$store.getters.loggedIn },
@@ -237,8 +239,7 @@ export default {
     }
   },
   methods: {
-    logout() { this.$store.dispatch('logout'); },
-    print(files) { console.log(files); },
+    logout() { this.$store.dispatch('logout') },
     readProfile() {
       this.profile.alias = this.$store.getters.alias;
       //image init required
@@ -268,12 +269,22 @@ export default {
         this.toEditProfile = false;
         this.resetProfile();
       });
+    },
+    updateSubscription() {
+      this.updatingSubscription = true;
+      setTimeout(() => {
+        this.updatingSubscription = false;
+        this.mockSubscribing = !this.mockSubscribing;
+      }, 3000);
+      // subscribe().finally(() => {
+      //   this.updatingSubscription = false;
+      // });
     }
   },
-  mounted() {
-    setInterval(() => this.$store.dispatch('listenToSystem'), 3000);
-    setInterval(() => this.$store.dispatch('listenToPreference'), 3000);
-    setInterval(() => this.$vuetify.theme.dark = this.$store.getters.dark, 3000);
+  beforeUpdate() {
+    this.$store.dispatch('listenToSystem').finally(() => {
+      this.$store.dispatch('listenToPreference');
+    }).finally(() => this.$vuetify.theme.dark = this.$store.getters.dark);
   },
   watch: {
     onTheTrip() {
