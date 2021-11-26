@@ -1,12 +1,9 @@
 
 export default {
     state: () => ({
-        preferDark: false,
         systemDark: false
     }),
     mutation: {
-        preferDark(state) { state.preferDark = true },
-        preferWhite(state) { state.preferDark = false },
         systemDark(state) { state.systemDark = true },
         systemWhite(state) { state.systemDark = false },
     },
@@ -17,39 +14,15 @@ export default {
                 else commit('systemWhite');
             });
         },
-        async listenToPreference({ commit, dispatch, getters }) {
-            try {
-                await dispatch('getMyProfile');
-                const preferDark = getters.preferDark;
-                if(preferDark) commit('preferDark');
-                else commit('preferWhite');
-            } catch (error) {
-                console.error(error);
-                // await dispatch('setError', error.message);
-            }
+        async preferDark({ dispatch }) {
+            await dispatch('editProfile', { prefer_dark: true }).catch(console.error);
         },
-        async preferDark({ commit, dispatch }) {
-            try {
-                await dispatch('editProfile', { prefer_dark: true });
-                commit('preferDark');
-            } catch (error) {
-                console.error(error);
-                // await dispatch('setError', error.message);
-            }
-        },
-        async preferWhite({ commit, dispatch }) {
-            try {
-                await dispatch('editProfile', { prefer_dark: false });
-                commit('preferWhite');
-            } catch (error) {
-                console.error(error);
-                // await dispatch('setError', error.message);
-            }
+        async preferWhite({ dispatch }) {
+            await dispatch('editProfile', { prefer_dark: false }).catch(console.error);
         },
     },
     getters: {
-        preferDark: state => state.preferDark,
         systemDark: state => state.systemDark,
-        dark: state => state.preferDark || state.systemDark
+        dark: (state, getters) => getters.preferDark || state.systemDark
     }
 };

@@ -112,7 +112,7 @@ export default {
       email: state => state.user ? state.user.email : null,
       userId: state => state.user ? state.user.id : null,
       profileId: state => state.profile ? state.profile.id : null,
-      prefer_dark: state => state.profile ? state.profile.prefer_dark : false,
+      preferDark: state => state.profile ? state.profile.prefer_dark : false,
       subscribing: state => state.profile ? state.profile.subscribing : false
     },
   };

@@ -280,11 +280,10 @@ export default {
       // });
     }
   },
-  beforeUpdate() {
-    this.$store.dispatch('listenToSystem').finally(() => {
-      this.$store.dispatch('listenToPreference');
-    }).finally(() => this.$vuetify.theme.dark = this.$store.getters.dark);
+  mounted() {
+    this.$store.dispatch('listenToSystem');
   },
+  updated() { this.$vuetify.theme.dark = this.$store.getters.dark },
   watch: {
     onTheTrip() {
       if(this.onTheTrip) {
