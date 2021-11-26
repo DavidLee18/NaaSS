@@ -152,14 +152,13 @@
 
       <v-spacer></v-spacer>
 
-      <v-progress-circular v-if="loadIFrame" indeterminate></v-progress-circular>
+      <v-progress-circular v-if="loadIFrame || updatingSubscription" indeterminate></v-progress-circular>
 
       <v-tooltip bottom>
         <template v-slot:activator="{ on, attrs }">
           <v-btn icon v-bind="attrs" v-on="on"
             @click="updateSubscription"
-            :color="mockSubscribing || updatingSubscription ? undefined : 'error'"
-            :loading="updatingSubscription"
+            :color="mockSubscribing ? undefined : 'error'"
           >
             <v-icon> {{ mockSubscribing ? 'mark_email_read' : 'unsubscribe' }} </v-icon>
           </v-btn>
