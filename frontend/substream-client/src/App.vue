@@ -158,12 +158,12 @@
         <template v-slot:activator="{ on, attrs }">
           <v-btn icon v-bind="attrs" v-on="on"
             @click="updateSubscription"
-            :color="mockSubscribing ? undefined : 'error'"
+            :color="$store.getters.subscribing ? undefined : 'error'"
           >
-            <v-icon> {{ mockSubscribing ? 'mark_email_read' : 'unsubscribe' }} </v-icon>
+            <v-icon> {{ $store.getters.subscribing ? 'mark_email_read' : 'unsubscribe' }} </v-icon>
           </v-btn>
         </template>
-        <span>{{ mockSubscribing ? 'CVE 구독중' : 'CVE 구독 일시정지됨' }}</span>
+        <span>{{ $store.getters.subscribing ? 'CVE 구독중' : 'CVE 구독 일시정지됨' }}</span>
       </v-tooltip>
 
       <v-tooltip bottom>
@@ -198,13 +198,14 @@
         </v-alert>
         <div v-if="$store.getters.errorHtml" :v-html="$store.getters.errorHtml"></div>
         <router-view />
+        <v-snackbar v-model="subscriptionUpdated">{{ $store.getters.subscribing ? '이제 CVE 서비스를 구독합니다' : 'CVE 서비스 구독을 일시정지합니다' }}</v-snackbar>
       </v-container>
     </v-main>
   </v-app>
 </template>
 
 <script>
-// import { subscribe } from './functions';
+import { subscribe } from './functions';
 // import { mega } from './functions';
 
 export default {
@@ -224,7 +225,8 @@ export default {
     },
     toEditProfile: false,
     valid: false,
-    updatingSubscription: false
+    updatingSubscription: false,
+    subscriptionUpdated: false,
   }),
   computed: {
     loggedIn() { return this.$store.getters.loggedIn },
@@ -271,13 +273,14 @@ export default {
     },
     updateSubscription() {
       this.updatingSubscription = true;
-      setTimeout(() => {
-        this.updatingSubscription = false;
-        this.mockSubscribing = !this.mockSubscribing;
-      }, 3000);
-      // subscribe().finally(() => {
+      // setTimeout(() => {
       //   this.updatingSubscription = false;
-      // });
+      //   this.mockSubscribing = !this.mockSubscribing;
+      // }, 3000);
+      subscribe().finally(() => {
+        this.updatingSubscription = false;
+        this.subscriptionUpdated = true;
+      });
     }
   },
   mounted() {
