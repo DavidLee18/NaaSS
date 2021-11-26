@@ -1,6 +1,13 @@
 import router from './router';
 import store from './store';
 
+
+export const subscribe = () => changeSubscribingState(true);
+
+export const unsubscribe = () => changeSubscribingState(false);
+
+const changeSubscribingState = subscribing => store.dispatch('editProfile', { subscribing }).catch(console.error);
+
 export const mega = 1024 * 1024;
 
 export const toDateString = date => date.toISOString().split('T')[0];
