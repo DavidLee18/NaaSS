@@ -157,6 +157,15 @@
 
       <v-tooltip bottom>
         <template v-slot:activator="{ on, attrs }">
+          <v-btn icon v-bind="attrs" v-on="on" @click="mockSubscribing = !mockSubscribing">
+            <v-icon> {{ $store.getters.subscribing ? 'mark_email_read' : 'unsubscribe' }} </v-icon>
+          </v-btn>
+        </template>
+        <span>{{ $store.getters.subscribing ? 'CVE 구독중' : 'CVE 구독 일시정지됨' }}</span>
+      </v-tooltip>
+
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on, attrs }">
           <v-btn icon v-bind="attrs" v-on="on" @click="toggleTheme">
             <v-icon>
               {{ $vuetify.theme.dark ? "dark_mode" : "light_mode" }}
@@ -199,6 +208,7 @@ export default {
   data: () => ({
     loadIFrame: false,
     mini: true,
+    mockSubscribing: false,
     profile: {
       alias: '',
       name: '',
