@@ -205,7 +205,7 @@
 </template>
 
 <script>
-import { mega } from './functions';
+// import { mega } from './functions';
 
 export default {
   data: () => ({
