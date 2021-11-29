@@ -198,7 +198,7 @@
         </v-alert>
         <div v-if="$store.getters.errorHtml" :v-html="$store.getters.errorHtml"></div>
         <router-view />
-        <v-snackbar v-model="subscriptionUpdated" :color="$vuetify.theme.dark ? 'white' : 'black'">
+        <v-snackbar v-model="subscriptionUpdated" :color="$vuetify.theme.dark ? 'primary' : undefined">
           {{ $store.getters.subscribing ? '이제 CVE 서비스를 구독합니다' : 'CVE 서비스 구독을 일시정지합니다' }}
         </v-snackbar>
       </v-container>
@@ -274,6 +274,7 @@ export default {
       });
     },
     updateSubscription() {
+      this.subscriptionUpdated = false;
       this.updatingSubscription = true;
       const finishUpdating = () => {
         this.updatingSubscription = false;
@@ -285,6 +286,7 @@ export default {
   },
   mounted() {
     this.$store.dispatch('listenToSystem');
+    this.$store.dispatch('getMyProfile');
   },
   updated() { this.$vuetify.theme.dark = this.$store.getters.dark },
   watch: {
