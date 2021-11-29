@@ -193,20 +193,16 @@ export default {
       if (!this.allValid) return;
       else {
         this.trying = true;
-        this.$store.dispatch('createUserAndLogin', {
-          email: this.email,
-          password: this.password
-        }).catch(e => {
+        this.$store.dispatch('createUserAndLogin', { email: this.email, password: this.password }).catch(e => {
           console.error(e);
           if(e.response && e.response.status === 400 && e.response.data.detail === 'Email already registered') {
             this.error = true;
           }
         })
-        .then(() => {
-          this.$store.dispatch('createProfile', { alias: this.username });
+        .then(() => { this.$store.dispatch('createProfile', { alias: this.username }) }).catch(console.error).finally(() => {
+          this.trying = false;
+          this.progress = 5;
         });
-        this.trying = false;
-        this.progress = 5;
       }
     },
   },
