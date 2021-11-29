@@ -67,6 +67,7 @@
             <v-btn color="green darken-1" outlined @click="sendResetEmail">
               확인
             </v-btn>
+            <v-btn text @click="forgotPassword = false">취소</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -107,7 +108,7 @@ export default {
         nimrod.sendPasswordResetEmail(this.toSendEmail).then(sent => {
           this.forgotPassword = false;
           this.resetEmailSent = sent;
-        });
+        }).finally(() => { this.toSendEmail = '' });
       }
     },
     validateAndReport() {

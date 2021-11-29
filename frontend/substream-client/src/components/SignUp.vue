@@ -197,7 +197,7 @@ export default {
           email: this.email,
           password: this.password
         }).catch(e => {
-          console.log(e);
+          console.error(e);
           if(e.response && e.response.status === 400 && e.response.data.detail === 'Email already registered') {
             this.error = true;
           }
