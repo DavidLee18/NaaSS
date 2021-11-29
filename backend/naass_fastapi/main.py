@@ -24,10 +24,6 @@ ACCESS_TOKEN_EXPIRE_TIME: Final[timedelta] = timedelta(minutes=30)
 
 database.Base.metadata.create_all(bind=database.engine)
 
-origins = [
-    "http://192.168.200.17:8080"
-]
-
 app = FastAPI()
 
 app.add_middleware(
@@ -37,8 +33,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"]
 )
-
-#app.mount('/', StaticFiles(directory='dist'), 'dist')
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl='token')
 
@@ -186,7 +180,7 @@ async def reset_password(token_and_password: schemas.ResetPasswordPacket, db: Se
 async def create_user(user_form: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     db_user = crud.get_user_by_email(db, email=user_form.username)
     if db_user:
-        raise HTTPException(status_code=400, detail="Email already registered")
+        raise HTTPException(status_code=400, detail="DUPLICATE_EMAIL")
     return crud.create_user(db=db, user=schemas.UserCreate(
         email=user_form.username,
         hashed_password=get_password_hash(user_form.password)

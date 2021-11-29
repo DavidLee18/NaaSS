@@ -195,7 +195,7 @@ export default {
         this.trying = true;
         this.$store.dispatch('createUserAndLogin', { email: this.email, password: this.password }).catch(e => {
           console.error(e);
-          if(e.response && e.response.status === 400 && e.response.data.detail === 'Email already registered') {
+          if(e.response && e.response.status === 400 && e.response.data.detail === 'DUPLICATE_EMAIL') {
             this.error = true;
           }
         })
