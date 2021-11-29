@@ -58,7 +58,6 @@
                 v-model="toSendEmail"
                 label="E-mail *"
                 type="email"
-                @keyup.enter.prevent="sendResetEmail"
                 :rules="rules.email"/>
             </v-form>
           </v-card-text>
@@ -108,7 +107,10 @@ export default {
         nimrod.sendPasswordResetEmail(this.toSendEmail).then(sent => {
           this.forgotPassword = false;
           this.resetEmailSent = sent;
-        }).finally(() => { this.toSendEmail = '' });
+        }).finally(() => {
+          this.$refs.forgotPasswordForm.reset();
+          this.$refs.forgotPasswordForm.resetValidation();
+        });
       }
     },
     validateAndReport() {
