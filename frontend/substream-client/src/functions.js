@@ -1,4 +1,3 @@
-import router from './router';
 import store from './store';
 
 
@@ -6,25 +5,14 @@ export const subscribe = () => changeSubscribingState(true);
 
 export const unsubscribe = () => changeSubscribingState(false);
 
+//vuex dispatch를 간단하게 하기 위한 helper function
 const changeSubscribingState = subscribing => store.dispatch('editProfile', { subscribing }).catch(console.error);
 
-export const mega = 1024 * 1024;
-
-export const toDateString = date => date.toISOString().split('T')[0];
-
+//http response status가 정상 응답 범위에 있는지 판별하는 함수
 export const isOk = status => status >= 200 && status < 300;
 
-export const logInSafely = (user) => {
-  store.commit('login', user);
-  router.push('dashboard');
-};
-
-export const logoutSafely = () => {
-  store.commit('logout');
-  router.push('login');
-};
-
-export const handleError = (error) => {
+//http 요청 및 vuex dispatch마다 생길 수 있는 에러를 처리하는 함수
+export const handleError = error => {
   if(!error) return;
   store.dispatch('unsetError');
   if (error.response) {

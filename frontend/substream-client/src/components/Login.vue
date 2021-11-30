@@ -6,7 +6,6 @@
           <p class="text-h5 text--primary">NaaSS</p>
         </v-flex>
       </v-layout>
-      <!-- <v-card-title>E-mail로 로그인하세요</v-card-title> -->
       <v-form v-model="valid" ref="form" @submit="validateAndReport">
         <v-card-text>
           <v-text-field
@@ -97,7 +96,7 @@ export default {
     },
   }),
   computed: {
-    loggedIn() { return this.$store.getters.loggedIn; }
+    loggedIn() { return this.$store.getters.loggedIn }
   },
   methods: {
     sendResetEmail() {
@@ -123,7 +122,6 @@ export default {
           password: this.password,
         });
         this.trying = false;
-        //this.$router.push({name: 'Dashboard'});
       }
     }
   },

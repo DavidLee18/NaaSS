@@ -36,43 +36,9 @@
       </v-container>
     </section>
     <section v-else>
-      <!-- <v-alert v-if="false" :value="tripError" type="warning" transition="scale-transition">
-        <v-row align="center">
-          <v-col class="grow">
-            NGINX 체험관 이용에 문제가 있나요? 다른 체험관을 이용해 보세요
-          </v-col>
-          <v-col class="shrink">
-            <v-btn @click="$router.push('/nginx-trip')">다른 체험관 보기</v-btn>
-          </v-col>
-        </v-row>
-      </v-alert> -->
       <iframe id="portal" :sandbox="sandboxStatement"
       :src="selectedTrip.source" frameBorder="0"
       @error="handleIFrameError($event)"></iframe>
-      <!-- <v-dialog
-        v-if="false"
-        persistent
-        max-width="290"
-      >
-        <v-card>
-          <v-card-title class="text-h5">
-            죄송합니다
-          </v-card-title>
-          <v-card-text>
-            연결된 체험관에서 오류가 발생했습니다. 
-            인터넷 연결을 확인해 주시고 새로고침하거나 다른 체험관을 이용해 주세요. 
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer/>
-            <v-btn
-              color="green darken-1"
-              text
-              link to="nginx-trip">
-              확인
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog> -->
     </section>
   </div>
 </template>
@@ -85,7 +51,6 @@ export default {
   data: () => ({
     intro: null,
     sandboxRules: ['allow-same-origin', 'allow-scripts', 'allow-forms'],
-    suggesting: false,
     tripError: false,
     trips: [
       {
@@ -129,14 +94,7 @@ export default {
     checkIfTripWorks() {
       const tripSource = this.selectedTrip.source;
       axios.get(tripSource).then(res => [res.status === 200, res.statusText])
-      .then(([succeeded, statusText]) => {
-        console.log(statusText);
-        if(!succeeded) { /*this.tripError = true;*/ }
-      })
-      .catch(error => {
-        // this.tripError = true;
-        handleError(error);
-      });
+      .then(([succeeded, statusText]) => console.log(statusText, succeeded)).catch(handleError);
     },
     handleIFrameError(error) {
       console.log(error);
@@ -149,12 +107,6 @@ export default {
       if(!val) this.$router.push({name: 'Login'});
       else return;
     },
-    onTheTrip() {
-      if(!this.onTheTrip) this.tripError = false;
-      else setTimeout(() => {
-        this.tripError = true;
-       }, 3000);
-    }
   }
 };
 </script>

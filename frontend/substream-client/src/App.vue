@@ -11,9 +11,6 @@
           <template v-slot:activator="{ on, attrs }">
             <v-list-item class="px-2" v-bind="attrs" v-on="on">
               <v-list-item-avatar>
-                <!-- <v-img v-if="false"
-                  src="https://randomuser.me/api/portraits/women/85.jpg"
-                ></v-img> -->
                 <v-icon>account_circle</v-icon>
               </v-list-item-avatar>
             </v-list-item>
@@ -25,9 +22,6 @@
 
         <v-list-item class="px-2" v-if="!mini">
           <v-list-item-avatar>
-            <!-- <v-img v-if="false"
-              src="https://randomuser.me/api/portraits/women/85.jpg"
-            ></v-img> -->
             <v-icon>account_circle</v-icon>
           </v-list-item-avatar>
         </v-list-item>
@@ -67,17 +61,6 @@
                             outlined
                             required/>
                         </v-col>
-                        <!-- <v-col cols="12">
-                          <v-file-input
-                            v-model="profile.image"
-                            :rules="rules.file"
-                            prepend-icon="mdi-camera"
-                            accept="image/*"
-                            outlined
-                            label="프로필 사진"
-                            show-size
-                            />
-                        </v-col> -->
                         <v-col cols="12" sm="6" md="4">
                           <v-text-field v-model="profile.name" outlined label="이름"/>
                         </v-col>
@@ -208,13 +191,11 @@
 
 <script>
 import { subscribe, unsubscribe } from './functions';
-// import { mega } from './functions';
 
 export default {
   data: () => ({
-    loadIFrame: false,
-    mini: true,
-    mockSubscribing: false,
+    loadIFrame: false, //nginx 체험관의 iframe을 로드할 때 true
+    mini: true, //navigation drawer가 펼쳐 있는지 여부
     profile: {
       alias: '',
       name: '',
@@ -223,7 +204,6 @@ export default {
     },
     rules: {
       alias: [ v => !!v || '별칭을 입력해 주세요' ],
-      // file: [ v => !v || v.size < 2 * mega || '파일 사이즈는 2MB 이하여야 합니다.' ],
     },
     toEditProfile: false,
     valid: false,
@@ -245,7 +225,6 @@ export default {
     logout() { this.$store.dispatch('logout') },
     readProfile() {
       this.profile.alias = this.$store.getters.alias;
-      //image init required
       this.profile.name = this.$store.getters.name;
       this.profile.department = this.$store.getters.department;
       this.profile.tel = this.$store.getters.tel;
@@ -253,7 +232,6 @@ export default {
     resetProfile() {
       this.profile = {
         alias: '',
-        // image: {},
         name: '',
         department: '',
         tel: ''

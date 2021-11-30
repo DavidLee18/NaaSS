@@ -5,11 +5,3 @@
       URL을 잘 입력하신 것이 맞나요?
   </div>
 </template>
-
-<script>
-export default {
-
-}
-</script>
-
-<style></style>

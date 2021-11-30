@@ -1,3 +1,5 @@
+//nimrod: http client object로서 http 요청을 처리한다.
+
 import axios from "axios";
 import QueryString from "qs";
 import { handleError, isOk } from './functions';

@@ -1,8 +1,8 @@
 export default {
     state: () => ({
-      errorOccured: false,
-      errorMessage: '',
-      errorHtml: '',
+      errorOccured: false, //에러가 발생했는지 여부
+      errorMessage: '', //사용자에게 보여줄 에러 메세지
+      errorHtml: '', //서버에서 HTML로 보낸 에러
     }),
     mutations: {
       htmlError(state, html) {

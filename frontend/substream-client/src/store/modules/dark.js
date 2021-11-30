@@ -1,7 +1,7 @@
 
 export default {
     state: () => ({
-        systemDark: false
+        systemDark: false //시스템 다크 모드 여부
     }),
     mutation: {
         systemDark(state) { state.systemDark = true },

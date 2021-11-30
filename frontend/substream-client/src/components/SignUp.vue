@@ -26,7 +26,7 @@
         <v-stepper-items>
           <v-stepper-content step="1">
             <v-card class="mb-12" elevation="0" max-width="400" height="50">
-              <v-form v-model="valid.email" ref="email" @submit="$event.preventDefault()">
+              <v-form v-model="valid.email" ref="email" @submit="$event.preventDefault()"> <!--바로 submit 처리가 되면 요청이 가지 않고 페이지가 강제 새로고침 됨-->
                 <v-text-field 
                   v-model="email" 
                   :rules="rules.email" 
@@ -120,7 +120,7 @@
     <v-dialog v-model="duplicateEmail" persistent max-width="600">
       <v-card>
         <v-card-text>
-          이미 등록된 E-mail 을 사용할 수 없습니다. <br>
+          이미 등록된 E-mail을 사용할 수 없습니다. <br>
           다른 E-mail로 다시 시도해 주세요.
         </v-card-text>
         <v-card-actions>
@@ -162,7 +162,7 @@ export default {
       return {
         email: [  
           v => !!v || 'E-mail을 입력해 주세요',
-          v => /.+@.+/.test(v) || '유효한 E-mail이 아닙니다',
+          v => /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i.test(v) || '유효한 E-mail이 아닙니다',
         ],
         password: [
           v => !!v || '비밀번호를 입력해 주세요',

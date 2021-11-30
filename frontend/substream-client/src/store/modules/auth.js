@@ -3,9 +3,17 @@ import router from '../../router';
 
 export default {
     state: () => ({
-      user: null,
-      profile: null,
-      loggedIn: false
+      user: { id: null, email: '' }, //사용자
+      profile: {
+        id: null,
+        alias: '', //별칭
+        name: null, //이름
+        department: null, //소속
+        tel: null, //전화번호
+        prefer_dark: false, //다크모드 선호도
+        subscribing: false, //CVE 구독 여부
+      }, //프로필
+      loggedIn: false //로그인 상태
     }),
     mutations: {
         getMyInfo(state, user) { [state.user, state.loggedIn] = [user, true] },
