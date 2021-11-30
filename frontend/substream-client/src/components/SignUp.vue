@@ -117,7 +117,7 @@
         </v-stepper-items>
       </v-stepper>
     </v-card>
-    <v-dialog v-model="error" persistent max-width="600">
+    <v-dialog v-model="duplicateEmail" persistent max-width="600">
       <v-card>
         <v-card-text>
           이미 등록된 E-mail 을 사용할 수 없습니다. <br>
@@ -147,8 +147,7 @@ export default {
       password: false,
       passwordAgain: false,
       username: false,
-    },
-    error: false
+    }
   }),
   computed: {
     allValid() {
@@ -158,6 +157,7 @@ export default {
       }
       return v; 
     },
+    duplicateEmail() { return this.$store.getters.emailDuplicate },
     rules() {
       return {
         email: [  
@@ -193,13 +193,8 @@ export default {
       if (!this.allValid) return;
       else {
         this.trying = true;
-        this.$store.dispatch('createUserAndLogin', { email: this.email, password: this.password }).catch(e => {
-          console.error(e);
-          if(e.response && e.response.status === 400 && e.response.data.detail === 'DUPLICATE_EMAIL') {
-            this.error = true;
-          }
-        })
-        .then(() => { this.$store.dispatch('createProfile', { alias: this.username }) }).catch(console.error).finally(() => {
+        this.$store.dispatch('createUserAndLogin', { email: this.email, password: this.password }).then(() => {
+          this.$store.dispatch('createProfile', { alias: this.username }) }).catch(console.error).finally(() => {
           this.trying = false;
           this.progress = 5;
         });

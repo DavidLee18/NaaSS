@@ -180,7 +180,7 @@ async def reset_password(token_and_password: schemas.ResetPasswordPacket, db: Se
 async def create_user(user_form: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     db_user = crud.get_user_by_email(db, email=user_form.username)
     if db_user:
-        raise HTTPException(status_code=400, detail="DUPLICATE_EMAIL")
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="DUPLICATE_EMAIL")
     return crud.create_user(db=db, user=schemas.UserCreate(
         email=user_form.username,
         hashed_password=get_password_hash(user_form.password)
@@ -223,7 +223,7 @@ async def read_profiles(skip: int = 0, limit: int = 100, db: Session = Depends(g
 async def edit_profile(profile_id: int, profile: schemas.ProfileCreate, db: Session = Depends(get_db), current_user: schemas.UserCreate = Depends(get_current_user)):
     db_profile = crud.get_profile(db, profile_id)
     if db_profile is None:
-        raise HTTPException(400, 'profile not found')
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, 'profile not found')
     return crud.update_profile(db, profile_id, profile)
 
 @app.delete('/api/profiles/{profile_id}')

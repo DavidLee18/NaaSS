@@ -5,13 +5,16 @@ export default {
     state: () => ({
       user: null,
       profile: null,
-      loggedIn: false
+      loggedIn: false,
+      emailDuplicate: false
     }),
     mutations: {
-        getMyInfo(state, user) { [state.user, state.loggedIn] = [user, true]; },
-        getMyProfile(state, profile) { [state.profile, state.loggedIn] = [profile, true]; },
-        login(state) { state.loggedIn = true; },
-        logout(state) { [state.user, state.profile, state.loggedIn] = [null, null, false]; },
+        getMyInfo(state, user) { [state.user, state.loggedIn] = [user, true] },
+        getMyProfile(state, profile) { [state.profile, state.loggedIn] = [profile, true] },
+        login(state) { state.loggedIn = true },
+        logout(state) { [state.user, state.profile, state.loggedIn] = [null, null, false] },
+        duplicateEmail(state) { state.emailDuplicate = true },
+        fineEmail(state) { state.emailDuplicate = false }
     },
     actions: {
       async login({ commit, dispatch }, { email, password }) {
@@ -42,7 +45,12 @@ export default {
         }
       },
       async createUserAndLogin({ commit, dispatch }, { email, password }) {
-        const res = await nimrod.createUser(email, password);
+        commit('fineEmail');
+        const res = await nimrod.createUser(email, password).catch(e => {
+          console.error(e);
+          if(e.response && e.response.status === 400) commit('duplicateEmail');
+          else return;
+        });
         if(res && res.status === 201) {
           const user = res.data;
           commit('getMyInfo', user);
@@ -113,6 +121,7 @@ export default {
       userId: state => state.user ? state.user.id : null,
       profileId: state => state.profile ? state.profile.id : null,
       preferDark: state => state.profile ? state.profile.prefer_dark : false,
-      subscribing: state => state.profile ? state.profile.subscribing : false
+      subscribing: state => state.profile ? state.profile.subscribing : false,
+      emailDuplicate: state => state.emailDuplicate,
     },
   };
