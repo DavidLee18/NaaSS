@@ -9,7 +9,7 @@ class User(database.Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True)
-    email = Column(String(20), unique=True, index=True)
+    email = Column(String(40), unique=True, index=True)
     hashed_password = Column(String(100))
     reg_date = Column(Date, nullable=True)
 
