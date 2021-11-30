@@ -53,6 +53,8 @@ mail_conf = ConnectionConfig(
 mail = FastMail(mail_conf)
 
 # Dependency
+
+# db를 로드하는 function
 async def get_db():
     db = database.SessionLocal()
     try:
@@ -60,12 +62,15 @@ async def get_db():
     finally:
         db.close()
 
+# password를 입력하면 db에 저장된 해시 상태의 비밀번호와 일치하는지 확인한다
 def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
 
+#비밀번호를 해시한다
 def get_password_hash(password):
     return pwd_context.hash(password)
 
+#JWT 토큰을 생성한다
 def create_access_token(data: dict, expires_delta: timedelta = timedelta(minutes=15)):
     to_encode = data.copy()
     expire = datetime.utcnow() + expires_delta
@@ -73,6 +78,7 @@ def create_access_token(data: dict, expires_delta: timedelta = timedelta(minutes
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
+#쿠키에 있는 JWT 토큰에 저장된 email로 db에서 사용자를 읽어와 반환한다
 async def get_current_user(access: Optional[str] = Cookie(None), db: Session = Depends(get_db)):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -95,6 +101,7 @@ async def get_current_user(access: Optional[str] = Cookie(None), db: Session = D
     except JWTError:
         raise credentials_exception
 
+#user가 실제로 db에 있는 사용자인지 검증한 후 반환한다.
 def authenticate_user(username: str, password: str, db: Session):
     user = crud.get_user_by_email(db, email=username)
     if not user:
@@ -103,6 +110,7 @@ def authenticate_user(username: str, password: str, db: Session):
         return False
     return user
 
+#JWT 토큰을 이용해 비밀번호 재설정 메일 본문을 반환한다
 def get_email_html(access_token: str):
     return f"""<p>
     이 메일은 본 메일주소로 등록된 NaaSS 계정의 비밀번호 재설정을 위해 발송되었습니다 <br>
@@ -113,12 +121,14 @@ def get_email_html(access_token: str):
     </p>"""
 
 
+#API
 
-
+#로그인 되어 있을 경우 자기 자신의 사용자 정보를 가져온다
 @app.get('/api/users/me')
 async def read_items(current_user: schemas.UserCreate = Depends(get_current_user)):
     return current_user
 
+#email과 password로 로그인해서 JWT 토큰을 쿠키로 반환한다
 @app.post('/api/token')
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     user = authenticate_user(form_data.username, form_data.password, db)
@@ -133,12 +143,14 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     res.set_cookie("access", access_token, expires=ACCESS_TOKEN_EXPIRE_TIME.seconds, secure=True, httponly=True)
     return res
 
+#요청에 있는 쿠키를 삭제함으로써 로그아웃한다
 @app.delete('/api/token')
 async def logout(current_user: schemas.UserCreate = Depends(get_current_user)):
     res = Response()
     res.delete_cookie('access')
     return res
 
+#email을 받아서 비밀번호 재설정 메일을 보낸다
 @app.post('/api/forgot-password', status_code=status.HTTP_202_ACCEPTED)
 async def send_password_reset_email(email: schemas.ForgotPasswordPacket, db: Session = Depends(get_db)):
     user = crud.get_user_by_email(db, email.email)
@@ -152,6 +164,7 @@ async def send_password_reset_email(email: schemas.ForgotPasswordPacket, db: Ses
         )
         await mail.send_message(message)
 
+#비밀번호 재설정 메일에 포함된 JWT 토큰과 새로운 비밀번호를 받아 해당 사용자의 비밀번호를 변경한다
 @app.post('/api/reset-password')
 async def reset_password(token_and_password: schemas.ResetPasswordPacket, db: Session = Depends(get_db)):
     credentials_exception = HTTPException(
@@ -175,7 +188,7 @@ async def reset_password(token_and_password: schemas.ResetPasswordPacket, db: Se
     except JWTError:
         raise credentials_exception
 
-
+#회원가입하여 사용자를 추가한다
 @app.post("/api/users", status_code=status.HTTP_201_CREATED)
 async def create_user(user_form: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     db_user = crud.get_user_by_email(db, email=user_form.username)
@@ -186,12 +199,12 @@ async def create_user(user_form: OAuth2PasswordRequestForm = Depends(), db: Sess
         hashed_password=get_password_hash(user_form.password)
         ))
 
-
+#전체 사용자를 가져온다
 @app.get("/api/users")
 async def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db), current_user: schemas.UserCreate = Depends(get_current_user)):
     return crud.get_users(db, skip=skip, limit=limit)
 
-
+#user id로 특정 사용자를 가져온다
 @app.get("/api/users/{user_id}")
 async def read_user(user_id: int, db: Session = Depends(get_db), current_user: schemas.UserCreate = Depends(get_current_user)):
     db_user = crud.get_user(db, user_id=user_id)
@@ -199,6 +212,7 @@ async def read_user(user_id: int, db: Session = Depends(get_db), current_user: s
         raise HTTPException(status_code=404, detail="User not found")
     return db_user
 
+#user id로 특정 사용자를 삭제한다
 @app.delete('/api/users/{user_id}')
 async def delete_user(user_id: int, db: Session = Depends(get_db), current_user: schemas.UserCreate = Depends(get_current_user)):
     succeeded = crud.delete_user(db, user_id)
@@ -208,17 +222,17 @@ async def delete_user(user_id: int, db: Session = Depends(get_db), current_user:
             'user to delete is not found'
         )
 
-
+#특정 사용자의 프로필을 생성한다
 @app.post("/api/users/{user_id}/profiles", status_code=status.HTTP_201_CREATED)
 async def create_profile_for_user(user_id: int, profile: schemas.ProfileCreate, db: Session = Depends(get_db), current_user: schemas.UserCreate = Depends(get_current_user)):
     return crud.create_profile(db=db, profile=profile, user_id=user_id)
 
-
+#전체 프로필들을 가져온다 (*특정 사용자의 프로필만 가져오는 기능 필요)
 @app.get("/api/profiles")
 async def read_profiles(skip: int = 0, limit: int = 100, db: Session = Depends(get_db), current_user: schemas.UserCreate = Depends(get_current_user)):
     return crud.get_profiles(db, skip=skip, limit=limit)
 
-
+#profile id로 특정 프로필을 가져온다
 @app.put('/api/profiles/{profile_id}')
 async def edit_profile(profile_id: int, profile: schemas.ProfileCreate, db: Session = Depends(get_db), current_user: schemas.UserCreate = Depends(get_current_user)):
     db_profile = crud.get_profile(db, profile_id)
@@ -226,6 +240,7 @@ async def edit_profile(profile_id: int, profile: schemas.ProfileCreate, db: Sess
         raise HTTPException(status.HTTP_400_BAD_REQUEST, 'profile not found')
     return crud.update_profile(db, profile_id, profile)
 
+#profile id로 특정 프로필을 삭제한다
 @app.delete('/api/profiles/{profile_id}')
 async def delete_profile(profile_id: int, db: Session = Depends(get_db), current_user: schemas.UserCreate = Depends(get_current_user)):
     succeeded = crud.delete_profile(db, profile_id)

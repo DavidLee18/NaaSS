@@ -4,7 +4,9 @@ from sqlalchemy.sql.sqltypes import BigInteger
 
 import database
 
+# 데이터베이스 테이블 모델링 (ORM)
 
+# user: 사용자 기본 정보에 관한 테이블
 class User(database.Base):
     __tablename__ = "users"
 
@@ -15,7 +17,8 @@ class User(database.Base):
 
     profiles = relationship("Profile", back_populates="owner")
 
-
+# profile: 사용자 프로필 정보 테이블
+# 현재 사용자와 프로필은 1대 다 관계를 이루고 있다.
 class Profile(database.Base):
     __tablename__ = "profiles"
 
@@ -27,17 +30,5 @@ class Profile(database.Base):
     subscribing = Column(Boolean, default=True)
     tel = Column(String(20))
     owner_id = Column(Integer, ForeignKey("users.id"))
-    # profile_image_id = Column(Integer, ForeignKey('profile_images.id'))
 
     owner = relationship("User", back_populates="profiles")
-
-
-# class ProfileImage(database.Base):
-#     __tablename__ = 'profile_images'
-
-#     id = Column(Integer, primary_key=True, index=True)
-#     name = Column(String(20), index=True)
-#     last_modified = Column(BigInteger)
-#     size = Column(BigInteger)
-#     type = Column(String(10))
-#     owner_id = Column(Integer, ForeignKey('users.id'))
