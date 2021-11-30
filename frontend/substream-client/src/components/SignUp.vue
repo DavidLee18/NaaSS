@@ -142,6 +142,7 @@ export default {
     email: '',
     username: '',
     trying: false,
+    duplicateEmail: false,
     valid: {
       email: false,
       password: false,
@@ -157,7 +158,6 @@ export default {
       }
       return v; 
     },
-    duplicateEmail() { return this.$store.getters.emailDuplicate },
     rules() {
       return {
         email: [  
@@ -178,6 +178,7 @@ export default {
   },
   methods: {
     resetForms() {
+      this.duplicateEmail = false;
       this.email = ''; this.username = ''; this.password = ''; this.passwordAgain = '';
       
       this.progress = 1;
@@ -193,7 +194,11 @@ export default {
       if (!this.allValid) return;
       else {
         this.trying = true;
-        this.$store.dispatch('createUserAndLogin', { email: this.email, password: this.password }).then(() => {
+        this.$store.dispatch('createUserAndLogin', { email: this.email, password: this.password }).catch(e => {
+          console.error(`error during createUserAndLogin: ${e}`);
+          //eror가 undefined로 오지만 서버에서 오는 error는 e-mail이 중복되었을 때 오므로...
+          this.duplicateEmail = true;
+        }).then(() => {
           this.$store.dispatch('createProfile', { alias: this.username }) }).catch(console.error).finally(() => {
           this.trying = false;
           this.progress = 5;
